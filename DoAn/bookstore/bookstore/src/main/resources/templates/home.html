@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Home page</title>
+
+    <link rel="stylesheet" type="text/css" th:href="@{../../css/style.css}">
+    <link rel="stylesheet" th:href="@{../../css/animate.css}">
+
+    <!-- <link rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+        crossorigin="anonymous"> -->
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+          integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2"
+          crossorigin="anonymous">
+
+
+    <link rel="stylesheet"
+          href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+          integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p"
+          crossorigin="anonymous"/>
+
+    <!--Slick Carousel Slider-->
+    <link rel="stylesheet" type="text/css"
+          href="https://cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.1/slick/slick-theme.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+
+</head>
+
+<body>
+<!-- ======================================NAVIGATION====================================== -->
+<div class="container-fluid header bg-primary">
+    <div id="header" th:fragment="navbar-fragment" class="container-fluid" style="text-align: center">
+        <nav class="navbar navbar-expand-lg navbar-dark" id="navbar-homepage">
+            <div class="container-md ">
+                <!-- <img style="with: 100%; height: 100%" th:src="@{/image/logo.jpg}"
+                        class="brand_logo" alt="Logo"> -->
+                <a class="navbar-brand" href="/home/view" style="font-size :26px; font-weight: bold">
+                    <img style="max-height: 30px;" alt="book-store" th:src="@{/image/icon-book-shop-64.png}"> Book store</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse"
+                        data-target="#navbarSupportedContent"
+                        aria-controls="navbarSupportedContent" aria-expanded="false"
+                        aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <form class="form-inline my-2 my-lg-0 col-sm-10 col-md-10" th:action="@{/home/search}">
+                        <input class="form-control mr-sm-2 col-sm-9 col-md-10" type="search" style="margin-right: 100px"
+                               placeholder="Search" aria-label="Search" name="searchvalue">
+                        <button class="btn btn-secondary my-2 my-sm-0 " type="submit" style="color: white">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </form>
+
+                    <div class="col-sm-1 col-md-3">
+                        <a th:href="@{/account/check-login}"><i class="far fa-user"></i></a>
+                        <a th:href="@{/cart}" style="margin-left: 20px;position:relative;">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class='badge badge-warning' id='lblCartCount' style="background-color: #ffb507;position: absolute;top: -9px;left: 11px;" th:text="${cardNumber}"></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
+</div>
+
+<div class="container-md">
+    <!-- ======================================CAROUSEL====================================== -->
+    <div class="row mt-2">
+        <div class="col-md-3 bg-white ">
+            <div class="bg-info text-white text-center p-2" style="margin-right: -15px;margin-left: -15px"> Danh mục
+                sách
+            </div>
+            <div style="max-height: 275px;overflow: auto;margin-right: -15px">
+                <ul class="nav flex-column">
+                    <li th:each="category, state: ${categories}"><a class="nav-link"
+                                                                    th:href="@{'/home/category/' + ${category.categoryId} }"
+                                                                    th:text="${category.name}"></a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img class="d-block w-100" style="width: 100%; height: 100%"
+                             th:src="@{../../image/background8.jpg}" alt="First slide">
+                    </div>
+                    <div class="carousel-item">
+                        <img style="width: 100%; height: 100%" class="d-block w-100"
+                             th:src="@{../../image/background2.jpg}" alt="Second slide">
+                    </div>
+                    <div class="carousel-item">
+                        <img style="width: 100%; height: 100%" class="d-block w-100"
+                             th:src="@{../../image/background3.jpg}" alt="Third slide">
+                    </div>
+                </div>
+                <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+
+    <!--====================================== POSTER SALE OFF====================================== -->
+    <div class="row mt-2">
+        <img style="background-size:cover" class="d-block w-100" th:src="@{../../image/poster-sale-off.png}">
+    </div>
+
+    <!-- ===============================SLIDER SLICK TOP BUY====================================== -->
+    <div class="row mt-4  card" style="align-items: center;">
+        <div class="font-weight-bold w-100 p-2">
+            <img style="width: 30px; height: auto" th:src="@{../../image/ico_dealhot.png}">&ensp;
+            <strong>SÁCH ĐƯỢC YÊU THÍCH</strong>
+        </div>
+        <br>
+        <div class="items">
+            <div class="col-md-4 col-lg-3 wow bounceIn mb-3" style="height: 280px;min-width: 250px"
+                 th:each="product, state: ${listTopBook}">
+                <a th:href="@{'/book/'+${product.idBook}}" class="itemside border">
+	                <span class="aside text-center">
+	                    <img th:src="@{'../../image/' + ${product.picture}}" class="img-sm">
+	                </span>
+                    <span class="info">
+	                    <span class="title" id="book-name">[[${product.bookName}]] <br> 
+	                        <span class="text-muted">[[${product.author.name}]] </span>
+	                    </span>
+	                    <span class="text-danger font-weight-bold" id="book-price">[[${#numbers.formatDecimal(product.price, 0, 'POINT', 0, 'POINT')+' đ'}]]</span>
+	                </span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ==============================TOP NEW BOOK ======================================-->
+    <div class="row mt-4 card">
+        <div class="p-2 d-flex align-items-center border-bottom border-warning">
+            <img style="width: 30px; height: auto" th:src="@{../../image/New-icon.png}">&ensp;
+            <strong>SÁCH MỚI</strong>
+        </div>
+
+        <div class="card-body">
+            <ul class="row list-product">
+                <li class="col-md-4 col-lg-3 wow bounceIn mb-3" th:each="product, state: ${listNewBook}">
+                    <a th:href="@{'/book/'+${product.idBook}}" class="itemside border">
+			                <span class="aside text-center">
+			                    <img th:src="@{'../../image/' + ${product.picture}}" class="img-sm">
+			                </span>
+                        <span class="info">
+			                    <span class="title" id="book-name">[[${product.bookName}]] <br> 
+			                        <span class="text-muted">[[${product.author.name}]] </span>
+			                    </span>
+			                    <span class="text-danger font-weight-bold" id="book-price">[[${#numbers.formatDecimal(product.price, 0, 'POINT', 0, 'POINT')+' đ'}]]</span>
+			                </span>
+                    </a> <br>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+
+    <!-- ======================================PRODUCT CARDS ======================================-->
+    <div class="row mt-4 card">
+        <div class="p-2 d-flex align-items-center border-bottom border-success">
+            <img style="width: 30px; height: auto" th:src="@{../../image/icon-goi-y.png}">&ensp;
+            <strong>GỢI Ý HÔM NAY</strong>
+        </div>
+        <div class="card-body">
+            <ul class="row list-product">
+                <li class="col-md-4 col-lg-3 wow bounceIn mb-3" th:each="product, state: ${list}">
+                    <a th:href="@{'/book/'+${product.idBook}}" class="itemside border">
+			                <span class="aside text-center">
+			                    <img th:src="@{'../../image/' + ${product.picture}}" class="img-sm">
+			                </span>
+                        <span class="info">
+			                    <span class="title" id="book-name">[[${product.bookName}]] <br> 
+			                        <span class="text-muted">[[${product.author.name}]] </span>
+			                    </span>
+			                    <span class="text-danger font-weight-bold" id="book-price">[[${#numbers.formatDecimal(product.price, 0, 'POINT', 0, 'POINT')+' đ'}]]</span>
+			                </span>
+                    </a> <br>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ======================================PAGEING====================================== -->
+    <div class="row" style="padding-top: 20px">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <li class="page-item">
+                    <a class="page-link btn btn-outline-primary" th:if="${currentPage > 1}"
+                       th:href="@{'/home/view/' + ${pageFirst} }">First</a>
+                    <span class="btn btn-outline-primary active" th:unless="${currentPage > 1}">First</span>
+                </li>
+
+                <li th:each="i : ${#numbers.sequence(1, totalPage)}" style="margin-left: 2px;margin-right: 2px;">
+                    <a class="page-link btn btn-outline-primary" th:if="${currentPage != i}"
+                       th:href="@{'/home/view/' + ${i} }">[[${i}]]</a>
+                    <span class="btn btn-outline-primary active" th:unless="${currentPage != i}">[[${i}]]</span>
+                </li>
+
+                <li class="page-item">
+                    <a class="page-link btn btn-outline-primary" th:if="${currentPage < totalPage}"
+                       th:href="@{'/home/view/'+${totalPage}}">Last</a>
+                    <span class="btn btn-outline-primary active" th:unless="${currentPage < totalPage}">Last</span>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<!-- ======================================FOOOTER====================================== -->
+<div id="footer" th:fragment="footer-fragment" class="container-fluid "
+     style="color: black; background-color: #ffff002e;">
+    <div class="container-md ">
+        <div class="row">
+            <div class="col-md-4 wow tada">
+                <p style="font-size: 20px">THÔNG TIN STORE</p>
+                <p class="about text-muted">Bookstore - Khi chúng mình đi học!</p> <br>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1959.261208731272!2d106.78490292578554!3d10.847813332339927!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x317527131ae8b249%3A0x4d2d3c8fab7d3c2e!2zOTcgxJDGsOG7nW5nIE1hbiBUaGnhu4duLCBIaeG7h3AgUGjDuiwgUXXhuq1uIDksIFRow6BuaCBwaOG7kSBI4buTIENow60gTWluaCwgVmlldG5hbQ!5e0!3m2!1sen!2s!4v1639055130774!5m2!1sen!2s"
+                        width="600" height="450" style="margin-top:65px;border:0;" allowfullscreen=""
+                        loading="lazy"></iframe>
+            </div>
+            <div class="col-md-4 wow tada ">
+                <p style="font-size: 20px">LIÊN HỆ</p>
+                <p class="about  text-muted">Địa chỉ: 97 Man Thiện, phường Hiệp Phú, Quận 9, Thành phố Hồ Chí Minh</p>
+                <p class="about  text-muted">Số điện thoại: 0982 755 926 (Mrs. Jade)</p>
+            </div>
+            <div class="col-md-4 wow tada">
+                <p style="font-size: 20px;font-style: italic;">Bích Hằng Nhi</p>
+                <img th:src="@{/image/HNBT.jpg}" style="width:45%">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script
+        src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script
+        src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+<script th:src="@{../../script/wow.js}"></script>
+<script th:src="@{../../script/wow.min.js}"></script>
+<script>
+          new WOW().init();
+       
+		$(document).ready(function(){
+			//event slider
+        	 $('.items').slick({
+	        	 infinite: true,
+	        	 slidesToShow: 4,
+	        	 slidesToScroll: 4
+        	 });
+			
+        	//load lại vị trí scroll chuột
+ 			var lastScrollTop = $.cookie('last-scroll-top');
+ 			if (lastScrollTop) {
+ 			    $(window).scrollTop(lastScrollTop);
+ 			    console.log(lastScrollTop)
+ 			    $.removeCookie('last-scroll-top');
+ 			} 
+ 			
+ 			//lưu vị trí scroll trước khi chuyển page
+ 			$(".page-link").on('click',function(){
+ 				$.cookie('last-scroll-top', $(window).scrollTop());
+ 			})
+       	  });
+
+</script>
+
+</body>
+</html>
+
+
+
+

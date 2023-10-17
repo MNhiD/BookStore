@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="ISO-8859-1">
+<title>Giỏ hàng</title>
+
+<link rel="stylesheet" type="text/css"
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css">
+
+
+<link rel="stylesheet" th:href="@{../../css/animate.css}">
+
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
+
+
+<link rel="stylesheet" type="text/css"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+
+
+<link rel="stylesheet" type="text/css"
+	th:href="@{../../css/sidebarStyle.css}">
+
+
+<link rel="stylesheet" type="text/css"
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css">
+
+<link rel="stylesheet"
+	href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+	integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p"
+	crossorigin="anonymous" />
+</head>
+
+<body>
+
+
+
+
+
+
+	<div class="container-fluid">
+		<div class="row header">
+			<div class="col-md-3">
+				<div th:fragment="sidebar-fragment"
+					class="d-flex flex-column vh-100 flex-shrink-0 p-3 text-white bg-dark"
+					style="width: 250px;">
+					<a href="/home/view/1"
+						class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-decoration-none">
+						<svg class="bi me-2" width="40" height="32"> </svg> <span style="color:gold; font-weight: bold"
+						class="fs-4">Book store</span>
+					</a>
+					<hr>
+					<ul class="nav nav-pills flex-column mb-auto">
+						<li class="nav-item"><a href="/account/userInfo"
+							class="nav-link  " aria-current="page" style="color:gold;"> <i
+								class="fa fa-home"></i><span class="ms-2" >Thông tin tài
+									khoản</span>
+						</a></li>
+						<li><a href="/account/cart" class="nav-link " style="color:gold;"> <i
+								class="fa fa-cart-plus" aria-hidden="true" ></i> <span
+								class="ms-2">Giỏ hàng</span>
+						</a></li>
+						<li><a href="#" class="nav-link  active"><i
+								class="fa fa-list" aria-hidden="true"></i> <span class="ms-2">Danh
+									sách đơn hàng</span> </a></li>
+
+					</ul>
+					<hr>
+					<div class="dropdown">
+						<a href="#"
+							class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+							id="dropdownUser1" data-bs-toggle="dropdown"
+							aria-expanded="false"> <img th:src="@{../../image/user-girl.png}"
+							alt="" width="32" height="32" class="rounded-circle me-2">
+							<strong th:text="${username}"></strong>
+
+						</a>
+						<ul class="dropdown-menu dropdown-menu-dark text-small shadow"
+							aria-labelledby="dropdownUser1">
+							<li><a class="dropdown-item"
+								th:href="@{/account/update-password}">Thay đổi mật khẩu</a></li>
+							<li><a class="dropdown-item" th:href="@{/logout}">Đăng
+									xuất</a></li>
+						</ul> 
+					</div>
+					
+				</div>
+
+			</div>
+
+			<div class="col-md-9 col-sm-12">
+				<div class="row"> 
+				 <div class="col-md-8 col-sm-12">
+							<div th:each="order:${orders}" class = "wow flipInY ">
+							<p class="order-date" th:data-idBook="${order.orderId}">
+								<i class="fas fa-clock"></i> <span
+									style="font-size: 20px; font-weight: bold"
+								 th:text="${#dates.format(order.orderDay, 'dd-MM-yyyy')}"> </span>
+							</p>
+							
+							<p class="order-price" th:data-book-price="${order.totalPrice}" style="padding-left: 20px">
+								Tổng tiền: <span style="color: red; font-weight: bold; font-size: 18px"
+									th:text="${#numbers.formatDecimal(order.totalPrice, 0, 'COMMA', 0, 'POINT')} + ' VND'"></span>
+							</p>
+							 <p class="order-address" style="padding-left: 20px">
+								Địa chỉ <span style="font-weight: bold; font-size: 18px"
+									th:text="${order.address.addressName +'  '+ order.address.village.villageName +', '+order.address.village.district.districtName+', '+order.address.village.district.province.provinceName}"></span>
+							</p>
+							
+							 <p class="order-address" style="padding-left: 20px">
+								Số điện thoại đặt hàng <span style="font-weight: bold; font-size: 18px"
+									th:text="${order.phoneOfCustomer}"></span>
+							</p>
+							 <p class="order-address order-status" style="color: blue; padding-left: 20px" th:if="${order.orderStatus==1}" ><i class="fas fa-hourglass-half"></i> Trạng thái: Đang xử lý</p>
+							 <p class="order-address " style="color: orange; padding-left: 20px" th:if="${order.orderStatus==3}" ><i class="fas fa-hourglass-half"></i> Trạng thái: Yêu cầu hủy</p>
+							 <p class="order-address " style="color: red; padding-left: 20px" th:if="${order.orderStatus==4}" ><i class="fas fa-hourglass-end"></i> Trạng thái: Đã hủy</p>
+							 <p class="order-address " style="color: green; padding-left: 20px" th:if="${order.orderStatus==2}" ><i class="fas fa-check-circle"></i> Trạng thái: Đã giao</p>
+							<div style="text-align: left; margin-left: 5%">
+								<a style="text-decoration: none">
+								<button type="button" class="btn btn-info btn-info-order" th:data-order-id = "${order.orderId}"><i class="far fa-info-circle"></i> Xem chi tiết</button>
+							</a>
+							
+							<button  th:if="${order.orderStatus==1}" type="button" th:data-order-id = "${order.orderId}" class="btn btn-danger btn-cancle-order" style="margin-left: 2%"><i class="fas fa-ban"></i>  Hủy đơn hàng</button>
+						
+							
+							</div>
+							
+							<hr>
+						</div>
+						
+						</div>
+				
+					<div class="col-md-5 col-sm-12" style="margin-top: 10%; display: none" id="order-detail-block">
+						<p class="book">
+								 <span style="font-size: 20px; font-weight: bold"><i class="fas fa-book"></i> </span>
+							</p>
+							<p class="book-price">
+								Đơn giá: <span></span>
+							</p>
+							<p style=" margin-right: 20px">
+								Số lượng:  
+							</p>
+							<a style="text-decoration: none; margin-left: 10%; "
+								href="#" >
+								<button type="button" class="btn btn-info" style="margin-top:10%">Xem sản phẩm</button>
+							</a>
+					
+					</div>
+					
+			</div>
+			
+			
+			<!-- PAGEING -->
+			
+			<div class="row" style="padding-top: 20px" th:if="${totalPage > 0}">
+				<nav aria-label="Page navigation example">
+					<ul class="pagination">
+						<li class="page-item"><a class="page-link"
+							th:if="${currentPage > 1}"
+							th:href="@{'/account/getAllOrder/' + ${pageFirst} }">First</a> <span
+							class="page-link" th:unless="${currentPage > 1}">First</span></li>
+	
+	
+	
+						<span th:each="i : ${#numbers.sequence(1, totalPage)}"> <a
+							class="page-link" th:if="${currentPage != i}"
+							th:href="@{'/account/getAllOrder/' + ${i} }">[[${i}]]</a> <span
+							class="page-link" th:unless="${currentPage != i}">[[${i}]]</span>
+						</span>
+	
+						<li class="page-item"><a class="page-link"
+							th:if="${currentPage < totalPage}"
+							th:href="@{'/account/getAllOrder/'+${totalPage}}">Last</a> <span
+							class="page-link" th:unless="${currentPage < totalPage}">Last</span>
+						</li>
+					</ul>
+				</nav>
+			</div>
+			<br> <br>
+	</div>
+
+		</div>
+
+
+
+
+	</div>
+	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+	<script th:src="@{../../script/ajaxForOrders.js}"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+		integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+		crossorigin="anonymous"></script>
+		
+		<script th:src="@{../../script/wow.js}"></script>
+<script th:src="@{../../script/wow.min.js}"></script>
+    <script>
+          new WOW().init();
+    </script>
+</body>
+</html>

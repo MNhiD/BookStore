@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title th:replace="/admin/fragments/head-tag.html :: title">Title</title>
+<th:block th:insert="/admin/fragments/head-tag.html :: link"></th:block>
+<link th:href="@{/css/admin/customer.css}" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css" rel="stylesheet"/>
+<link th:href="@{/css/admin/popup.css}" rel="stylesheet">
+</head>
+<style>
+	input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type=number] {
+  -moz-appearance: textfield;
+}
+#livesearch span {
+cursor : pointer;
+
+
+}
+#livesearch span:hover {
+    background-color: antiquewhite;
+}
+</style>
+<body>
+	<div id="toast"></div>
+	<div class="main__overlay animated fadeIn"></div>
+	<!-- ============================== HEADER ================================= -->
+	<div th:replace="/admin/fragments/header.html :: admin-header('/admin/warehouse/search')"></div>
+
+	<div class="container-fluid">
+		<div class="row">
+
+			<!-- ================= NAVIGATION =================== -->
+			<nav
+				th:replace="/admin/fragments/navigation.html :: admin-nav('Warehouse')"></nav>
+
+			<!-- ===================MAIN CONTENT=================== -->
+			<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+				<div
+					class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-1 mb-1 border-bottom">
+					<div class="m-2">
+						<form method="get" th:action="@{'/admin/warehouse/Add/' + ${currentPage}}">
+							<input type="hidden"  name="sortField" th:value="${sortField}"> 
+							<input type="hidden"  name="sortDir" th:value="${sortDir}">
+							<button type="submit" class="btn btn-success">Tạo đơn nhập</button>
+						</form> 
+					</div>
+				</div>
+
+				<!-- TABLE VIEW -->
+				<div class="table-responsive rounded-top rounded-bottom">
+					<table class="table table-bordered" id="myTable">
+						<thead>
+							<tr class="table-warning">
+								<th scope="col"><a
+									th:href="@{'/admin/warehouse/' + ${currentPage} + '?sortField=userId&sortDir=' +${reverseSortDir}} ">Mã đơn</a>
+								</th>
+
+								<th scope="col"><a
+									th:href="@{'/admin/warehouse/' + ${currentPage} + '?sortField=username&sortDir=' +${reverseSortDir}} ">Nhà cung cấp</a></th>
+
+								<th scope="col"><a
+										th:href="@{'/admin/warehouse/' + ${currentPage} + '?sortField=phone&sortDir=' +${reverseSortDir}} ">Số điện thoại</a>
+								</th>
+
+								<th scope="col"><a
+									th:href="@{'/admin/warehouse/' + ${currentPage} + '?sortField=email&sortDir=' +${reverseSortDir}} ">Email</a>
+								</th>
+
+								<th scope="col"><a
+										th:href="@{'/admin/warehouse/' + ${currentPage} + '?sortField=email&sortDir=' +${reverseSortDir}} ">Trạng thái</a>
+								</th>
+
+								<th scope="col"><a
+										th:href="@{'/admin/warehouse/' + ${currentPage} + '?sortField=email&sortDir=' +${reverseSortDir}} ">Tổng tiền</a>
+								</th>
+
+<!--								<th class="align-middle" style="width: 10%;" scope="col">Alter</th>-->
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="purchasing_order : ${lstPurchasingOrder}">
+								<td th:text="${purchasing_order.id_purchasing}">##</td>
+								<td th:text="${purchasing_order.id_supplier}">##</td>
+								<td th:text="${purchasing_order.phonenumber}">##</td>
+								<td th:text="${purchasing_order.email}">##</td>
+								<td>Mới tạo</td>
+								<td th:text="${purchasing_order.totalprice}">##</td>
+
+							</tr>
+						</tbody>
+					</table>
+
+
+					<div th:if="${totalPage > 1}">
+						<div class="row col-sm-10">
+							<div class="col-sm-2">Total Items: [[${totalItem}]]</div>
+							
+							<a class="btn btn-outline-primary" th:if="${currentPage > 1}"
+								th:href="@{'/admin/warehouse/' + ${pageFirst}  + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">First</a>
+							<span class="btn btn-outline-primary active" th:unless="${currentPage > 1}">First</span>&nbsp;&nbsp;
+							
+							<span th:each="i : ${#numbers.sequence(1, totalPage)}"> <a
+								class="btn btn-outline-primary" th:if="${currentPage != i}"
+								th:href="@{'/admin/warehouse/' + ${i} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} }">[[${i}]]</a>
+								<span class="btn btn-outline-primary active" th:unless="${currentPage != i}">[[${i}]]</span> &nbsp;
+							</span>
+							
+							<a th:if="${currentPage < totalPage}"
+								class="btn btn-outline-primary" th:href="@{'/admin/warehouse/' + ${currentPage +1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} }">Next</a>
+							<span class="btn btn-outline-primary active" th:unless="${currentPage < totalPage}">Next </span>&nbsp;&nbsp;
+							
+							<a th:if="${currentPage < totalPage}"
+								class="btn btn-outline-primary" th:href="@{'/admin/warehouse/'+${totalPage} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} }">Last</a>
+							<span class="btn btn-outline-primary active" th:unless="${currentPage < totalPage}">Last</span>
+						</div>
+
+					</div>
+
+				</div>
+				<!-- ===============FORM TẠO ĐƠN NHẬP =========================-->
+				<form th:action="@{/admin/warehouse/save}" th:object="${user}"
+									method="post" enctype="multipart/form-data" class="from__add--user animated bounceInDown">
+
+					<div class="card">
+						<div class="card-header ">
+							<p>ĐƠN NHẬP HÀNG</p>
+							<a style="color:white" th:href="@{'/admin/warehouse/' + ${currentPage}  + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">
+							<i style="z-index: 1000;" class="far fa-times-circle btn-close-from"></i></a>
+						</div>
+						<div class="card-body ">
+							<h1>Thông tin đơn nhập sách</h1>
+							<div class="row mb-3">
+								<div class="form-group">
+									<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Tìm sản phẩm" onkeyup="showResult(this.value)">
+									<div id="livesearch" style="padding: 15px 3px; max-height: 150px; overflow-y: auto">
+
+									</div>
+								</div>
+							</div>
+
+
+							<div style="max-height:280px; overflow:auto;">
+								<table class="table table-bordered" >
+									<thead>
+									<tr>
+										<th scope="col">#</th>
+										<th scope="col">Mã sản phẩm</th>
+										<th scope="col">Tên sản phẩm</th>
+										<th scope="col">Đơn giá</th>
+										<th scope="col">Số lượng</th>
+										<th scope="col">Thành tiền</th>
+										<th scope="col">Tác vụ</th>
+									</tr>
+									</thead>
+									<tbody id="myTableOrder">
+
+
+									</tbody>
+								</table>
+							</div>
+							<div style="display: flex; justify-content: flex-end; text-align:right;">
+								<div style="">
+									<h3>Tổng số lượng: <span id="TotalQuantity"></span> </h3>
+									<h3>Tổng Tiền: <span id="TotalPrice"></span></h3>
+									<button type="button" onclick="AddProduct()" class="btn btn-success">Xác nhận nhập hàng</button>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</form>
+
+				<!-- ===============DIALOG DELETE =======================-->
+				<form th:action="@{/admin/customer/delete}" class="from__confirm"
+					th:method="post">
+					<div class="card">
+						<div class="card-header">Xác nhận xóa</div>
+
+						<div class="card-body" style="text-align: center;">
+							<p class="card-text ">
+								Bạn chắc chắn muốn xóa khách hàng có id: <strong id="user-id"></strong>
+								<input type="text" class="form-control input-delete d-none"
+									name="id" th:value="${user.userId}">
+							</p>
+							<div class="btns-comfirm d-flex justify-content-end">
+
+								<a style="color: white;cursor: pointer;" class="btn btn-secondary btn-cancel mr-3">Hủy</a>
+
+								<button type="submit" class="btn btn-primary">Xác Nhận</button>
+
+							</div>
+
+						</div>
+					</div>
+				</form>
+			</main>
+		</div>
+	</div>
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script th:src="@{/script/adminJs/headerHandle.js}"></script>
+	<script th:src="@{/script/adminJs/MessageNotify.js}"></script>
+	<script th:src="@{/script/adminJs/customer.js}"></script>
+	<script th:src="@{/script/validate_input.js}"></script>
+	<script th:src="@{/script/adminJs/popup.js}"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
+	<script th:inline="javascript">
+		Validator({
+			form : '.from__add--user',
+			rules : [
+					Validator.isRequired('#user-name'),
+					Validator.isNum('#user-phone',10),
+					Validator.checkAge('#datepicker',10),
+					Validator.isEmail('#user-email'),
+					Validator.isRequired('#user-pass'),
+					Validator.confirmMes('#user-confirm', '#user-pass',
+							'Mật khẩu nhập lại không hợp lệ') ]
+		});
+		/*<![CDATA[*/
+		    var successMes = /*[[${successMes}]]*/ 'default';
+		    var erorrMes = /*[[${erorrMes}]]*/ 'default';
+		/*]]>*/
+		checkPopup(successMes,erorrMes)
+
+		/*<![CDATA[*/
+		var isAdd = /*[[${isAdd}]]*/'default';
+
+		//kiểm tra nếu them user nhận về lỗi thì hiện form nhập và hiện lại các thông tin vừa nhập
+		if (isAdd) {
+			addAndEditNewUser();
+			$('#user-name').val("");
+			$('#datepicker').val("");
+			$('#user-pass').val("");
+		}
+		/*]]>*/
+
+
+		/*<![CDATA[*/
+		var isError = /*[[${isError}]]*/'default';
+
+		//kiểm tra nếu them user nhận về lỗi thì hiện form nhập và hiện lại các thông tin vừa nhập
+		if (isError) {
+			var user2 = /*[[${user2}]]*/'default';
+			$('#user-form-id').val(user2.userId);
+			$('#user-name').val(user2.username);
+			$('#datepicker').val(user2.age);
+			$('#user-phone').val(user2.phone);
+			$('#user-email').val(user2.email);
+			$('#user-pass').val(user2.password);
+			$('#user-confirm').val(user2.password);
+			var listAddress=user2.setAddress.map((ele,i)=>
+				"<option value="+ele.village.villageId+">"+ele.addressName+"-"+ele.village.villageName+"</option>")
+			$("#list-village").html(listAddress)
+			$("#linkAddress").attr("href",$("#linkAddress").attr("href")+user2.userId)
+			console.log(user2)
+		}
+		/*]]>*/
+
+
+
+		/*<![CDATA[*/
+		var idEdit = /*[[${idEdit}]]*/'default';
+
+		//kiểm tra nếu them user nhận về lỗi thì hiện form nhập và hiện lại các thông tin vừa nhập
+		if (idEdit) {
+			addAndEditNewUser("EDIT USER","#FFC107")
+			const province = document.querySelector(".province");
+			var address2 = /*[[${address2}]]*/'default';
+			var user3 = /*[[${user3}]]*/'default';
+			if(user3){
+				$('#user-form-id').val(user3.userId);
+				$('#user-name').val(user3.username);
+				$('#user-name').attr('readOnly','true');
+				$('#datepicker').val(user3.age);
+				$('#user-phone').val(user3.phone);
+				$('#user-email').val(user3.email);
+				$('#user-pass').val(user3.password);
+				$('#user-confirm').val(user3.password);
+
+				var listAddress=user3.setAddress.map((ele,i)=>
+					"<option value="+ele.village.villageId+">"+ele.addressName+"-"+ele.village.villageName+"</option>")
+				$("#list-village").html(listAddress)
+				$("#linkAddress").attr("href",$("#linkAddress").attr("href")+user3.userId)
+				console.log(user3)
+			}
+
+		}
+		/*]]>*/
+
+
+    	const province = document.getElementById("province");
+    	const district = document.getElementById("district");
+    	const village = document.getElementById("village");
+    	function getProvince() {
+    		$.ajax({ type : 'GET',
+				url : '/api/address/province',
+				success : function(data) {
+					province.innerHTML = "";
+			         data.forEach(item => {
+			             let e = document.createElement('option');
+			             e.setAttribute("value",item.provinceId);
+			             e.innerHTML = item.provinceName;
+			             province.appendChild(e);
+			         })
+			           getDistrict(data[0].provinceId);
+				}
+			})
+    		}
+    		function getDistrict(provinceId) {
+    			$.ajax({ type : 'GET',
+       				url : '/api/address/district/'+provinceId,
+       				success : function(data) {1
+       					 district.innerHTML = "";
+       			            data.forEach(item => {
+       			                let e = document.createElement('option');
+       			                e.setAttribute("value",item.districtId);
+       			                e.innerHTML = item.districtName;
+       			                district.appendChild(e);
+
+       			            })
+       			       getVillage(data[0].districtId);
+       				}
+       			})
+    		}
+
+    		function getVillage(districtId) {
+    			$.ajax({ type : 'GET',
+       				url : '/api/address/village/'+districtId,
+       				success : function(data) {1
+       					village.innerHTML = "";
+       			            data.forEach(item => {
+       			                let e = document.createElement('option');
+       			                e.setAttribute("value",item.villageId);
+       			                e.innerHTML = item.villageName;
+       			             village.appendChild(e);
+       			            })
+
+       				}
+       			})
+    		}
+
+    		document.addEventListener("DOMContentLoaded",function () {
+    		   province.addEventListener("change",function () {
+    		       getDistrict(this.value);
+    		   });
+    		   district.addEventListener("change",function () {
+    			   getVillage(this.value);
+    		   });
+
+    		})
+
+			$("#datepicker").datepicker({
+			    format: "yyyy",
+			    viewMode: "years",
+			    minViewMode: "years"
+			});
+    		
+    		
+	</script>
+
+
+</body>
+</html>

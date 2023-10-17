@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+
+<link rel="stylesheet" type="text/css"
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css">
+
+
+
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
+
+
+<link rel="stylesheet" type="text/css"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+
+
+<link rel="stylesheet" type="text/css"
+	th:href="@{../../css/sidebarStyle.css}">
+
+<script th:src="@{../../script/sidebarHome.js}"></script>
+<link rel="stylesheet" type="text/css"
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css">
+	
+	
+<!-- <link rel="stylesheet"
+	href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+	integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p"
+	crossorigin="anonymous" /> -->
+</head>
+<body>
+
+
+
+
+
+
+
+
+
+	<div class="container-fluid">
+		<div class="row header">
+			<div class="col-md-3">
+				<div
+					class="d-flex flex-column vh-100 flex-shrink-0 p-3 text-white bg-dark"
+					style="width: 250px;">
+					<a href="/"
+						class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+						<svg class="bi me-2" width="40" height="32"> </svg> <span
+						class="fs-4">Book store</span>
+					</a>
+					<hr>
+					<ul class="nav nav-pills flex-column mb-auto">
+						<li class="nav-item"><a href="#" class="nav-link active"
+							aria-current="page"> <i class="fa fa-home"></i><span
+								class="ms-2">Thông tin tài khoản</span>
+						</a></li>
+						<li><a href="#" class="nav-link text-white"> <i class="fa fa-cart-plus" aria-hidden="true"></i>
+							<span class="ms-2">Giỏ hàng</span>
+						</a></li>
+						<li><a href="#" class="nav-link text-white"><i class="fa fa-list" aria-hidden="true"></i>
+						<span class="ms-2">Danh sách đơn hàng</span>
+						</a></li>
+						
+					</ul>
+					<hr>
+					<div class="dropdown">
+						<a href="#"
+							class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+							id="dropdownUser1" data-bs-toggle="dropdown"
+							aria-expanded="false">  <img th:src="@{../image/user.png}"
+							alt="" width="32" height="32" class="rounded-circle me-2">
+							
+							<strong> [[${username}]] </strong>
+						</a>
+						<ul class="dropdown-menu dropdown-menu-dark text-small shadow"
+							aria-labelledby="dropdownUser1">
+							<li><a class="dropdown-item" th:href="@{/logout}">Sign out</a></li>
+						</ul>
+					</div>
+				</div>
+
+			</div>
+
+
+			<div class="col-md-9">
+
+				<div id="header" class="container-fluid" style="text-align: center">
+					<h1 style="color:red">Thông tin đăng nhập</h1>
+					[[${userInfo}]]
+				</div>
+
+			</div>
+
+
+
+
+		</div>
+	</div>
+
+
+
+
+</body>
+</html>l>

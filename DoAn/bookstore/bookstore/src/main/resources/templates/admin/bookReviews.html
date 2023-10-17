@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title th:replace = "/admin/fragments/head-tag.html :: title">Title</title>
+	<th:block th:insert="/admin/fragments/head-tag.html :: link"></th:block>
+	<link th:href="@{/css/admin/review.css}" rel="stylesheet">
+</head>
+	
+<body style="background-color: #F5F5F5">
+	<div id="toast"></div>
+	<div class="main__overlay animated fadeIn"></div>
+	<!-- ============================== HEADER ================================= -->
+	<div th:replace="/admin/fragments/header.html :: admin-header('none')"></div>
+	
+	<div class="container-fluid">
+		<div class="row">
+		
+			<!-- ================= NAVIGATION =================== -->
+			<nav th:replace="/admin/fragments/navigation.html :: admin-nav('Reviews')"></nav>
+			
+			<!-- ===================MAIN CONTENT=================== -->
+			<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4 mb-3 main-content">
+				<div class="row book-detail p-2 ml-4 mr-5 ">
+					<div class="col-md-2">
+						<img style="height:180px;width:auto;" class="card-img-top " th:src="@{'/image/'+${book.picture}}"
+												alt="Card image cap">
+					</div>
+					<div class="col-md-9">
+						<h3>[[${book.bookName}]]</h3>
+						<div class="row">
+							<div class="col-md-9">
+								<div class="row">
+									<div class="col-xs-6 col-md-6">
+										<p>Tác giả: <strong>[[${book.author.name}]]</strong></p> 
+									</div>
+									<div class="col-xs-6 col-md-6">
+										<p>Thể loại: <strong>[[${book.category.name}]]</strong></p> 
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-xs-6 col-md-6">
+										<p>Nhà xuất bản: <strong>[[${book.company.name}]]</strong></p> 
+									</div>
+									<div class="col-xs-6 col-md-6">
+										<p>Ngày xuất bản: <strong>[[${#dates.format(book.publishDay, 'dd-MM-yyyy')}]]</strong></p> 
+									</div>
+								</div>
+								<h5 class="text-danger">[[${#numbers.formatDecimal(book.price, 0, 'POINT', 0, 'POINT')+' đ'}]]</h5>
+								<p class="text-muted">Số lượng tồn: <strong>[[${book.totalQuantity}]]</strong></p> 
+							</div>
+							
+						</div>
+					</div>
+					
+				</div>
+				<br>
+				<div class="container">
+				    <div class="row ">
+				        <div class="panel panel-default widget book-reviews p-2 col-xs-11 col-md-11">
+				            <div class="panel-heading">
+				                <span class="glyphicon glyphicon-comment"></span>
+				                <h3 class="panel-title">
+				                  Danh sách các lượt đánh giá</h3>
+				                <span class="label label-info  p-1 bg-info text-white rounded">Tổng: [[${totalReview}]]</span>
+				            </div>
+				            <div class="panel-body">
+				                <ul class="list-group" th:each="review: ${listReview}">
+				                    <li class="list-group-item animated fadeInDown">
+				                        <div class="row">
+				                            <div class="col-xs-1 col-md-1">
+				                                <img th:if="${review.user.gender==false}" th:src="@{'/image/user.png'}" class="img-circle img-responsive" alt="" style="width:60px"/>
+				                                <img th:unless="${review.user.gender==false}" th:src="@{'/image/user-girl.png'}" class="img-circle img-responsive" alt="" style="width:60px"/>
+				                            </div>
+				                            <div class="col-xs-10 col-md-10">	
+				                                <div>
+					                                <div class="mic-info">
+					                                   <strong>[[${review.user.username}]]</strong> 
+				                                    </div>
+				                                    <div class="ratings mb-1"> 
+										            	<i class="fa fa-star" th:classappend="${review.star >=1 }? rating-color : ''"></i> 
+										            	<i class="fa fa-star" th:classappend="${review.star >=2 }? rating-color : ''"></i> 
+										            	<i class="fa fa-star" th:classappend="${review.star >=3 }? rating-color : ''"></i> 
+										            	<i class="fa fa-star" th:classappend="${review.star>=4 }? rating-color : ''"></i> 
+										            	<i class="fa fa-star" th:classappend="${review.star >=5 }? rating-color : ''"></i>  
+										            </div>
+				                                </div>
+				                                <div class="comment-text">
+				                                    <h6>[[${review.comments}]]</h6>
+				                                    <div>
+										            	<p class="text-muted">[[${review.time}]]</p>
+										            </div>
+				                                </div>
+				                            </div>
+				                            <div class="col-xs-1 col-md-1">
+			                                    <button class="btn btn-danger btn__delete--review" >
+										          <i style="color:black;" class="far fa-trash-alt"></i>
+										        </button>
+										        <input type="hidden" id="requestDelete" th:value="'?idBook=' +${book.idBook}+'&idUser=' +${review.user.userId}+'&leng='+ ${leng}" >
+										        <input type="hidden" id="dataReview" th:value="${review.user.username}+': '+${review.comments}" >
+				                            </div>
+				                        </div>
+				                    </li>
+				                </ul>
+				                <th:block th:if="${totalReview > 2}">
+					                <a th:if="${listReview.size()< totalReview}" th:href="@{'/admin/review/bookReviews/' + ${book.idBook}+'?leng='+ ${leng+2}}"  class="btn btn-primary btn-sm btn-block btn-see-more" role="button"> Xem thêm</a>
+					            	<a th:unless="${listReview.size() < totalReview}" th:href="@{'/admin/review/bookReviews/' + ${book.idBook}+'?leng='+ ${2}}" class="btn btn-warning btn-sm btn-block btn-see-more" role="button">Thu gọn</a>
+				            	</th:block>
+				            	<th:block  th:if="${totalReview == 0}">
+					               <div class="align-middle text-center">(Chưa có đánh giá nào)</div>
+				            	</th:block>
+				            </div>
+				        </div>
+				    </div>
+				</div>
+				
+				<!-- ===============DIALOG CONFIRM DELETE  =======================-->
+				<form method="post" class="from__confirm">
+					<div class="card">
+						<div class="card-header">Xác nhận xóa</div>
+						
+						<div class="card-body" style="text-align: center;">
+							<p class="card-text ">Bạn chắc chắn muốn xóa bình luận:</p> 
+							<p class="font-weight-bold" id="book-id"></p>	
+							<div class="btns-comfirm d-flex justify-content-end">
+								<a class="btn btn-secondary btn-cancel mr-3 text-white">Hủy</a>
+								<button type="submit" class="btn btn-primary btn-cornfirm-delete">Xác Nhận</button>
+							</div>
+						</div>
+					</div>
+				</form>			
+			</main>
+		</div>
+	</div>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+	<script th:src="@{/script/adminJs/headerHandle.js}"></script>
+	<script th:src="@{/script/adminJs/popup.js}"></script>
+	<script th:inline="javascript" type="text/javascript">
+	/*<![CDATA[*/
+	    var successMes = /*[[${successMes}]]*/ 'default';
+	    var erorrMes = /*[[${erorrMes}]]*/ 'default';
+	/*]]>*/
+	checkPopup(successMes,erorrMes)
+	
+		$(document).ready(function() {
+			//load lại vị trí scroll chuột
+			var lastScrollTop = $.cookie('last-scroll-top');
+			if (lastScrollTop) {
+			    $(window).scrollTop(lastScrollTop);
+			    $.removeCookie('last-scroll-top');
+			   
+			} 
+			 console.log(lastScrollTop+"Ss")
+			$(".btn__delete--review").on('click',function(){
+				const formDelete=$(".from__confirm")
+				$(".main__overlay").css("display", "block");
+				formDelete.css("display", "block");
+				
+				//lấy action
+				var request = $(this).parent().find('#requestDelete').val();
+				
+				//lấy dữ liệu cần xóa, dùng để hiện thị confirm
+				var dataReview = $(this).parent().find('#dataReview').val();
+				formDelete.find("#book-id").text("\""+dataReview+"\"")//show dữ liệu confirm 
+				formDelete.attr('action','/admin/review/bookReviews/delete'+request)// thêm action
+				
+				
+				/* EVENT CLOSE FORM */
+				$(".btn-cancel").click((e) => {
+					$(".main__overlay").css("display", "none");
+					formDelete.css("display", "none");
+				})
+			})
+			
+			//lưu lại vị trí scroll chuột dùng khi load lại trang
+			$(".btn-cornfirm-delete").on('click',function(){
+				$.cookie('last-scroll-top', $(window).scrollTop());
+			})
+			$(".btn-see-more").on('click',function(){
+				$.cookie('last-scroll-top', $(window).height());
+			})
+		})
+	</script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+.sub-add{
+	position: relative;
+}
+
+.from__add--book-propterty{
+	position: absolute;
+	top:0;
+	left: 105%;
+}
+
+.input-add{
+	width:250px;
+}

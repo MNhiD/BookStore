@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Admin</title>
+</head>
+<body>
+	<nav th:fragment="admin-nav(pageTitle)" class="col-md-2 d-none d-md-block bg-light sidebar">
+				<div class="sidebar-sticky">
+					<ul class="nav flex-column nav-style" style="font-size:1rem;">
+						<li class="nav-item"><a class="nav-link" th:classappend="${#strings.equals(pageTitle,'Statistics')} ? active : ''" 
+							th:href="@{/admin/statisticts}"> 
+							<i class="fas fa-chart-area mr-2"></i></i>Trang chủ
+						</a></li>
+						<li class="nav-item"><a class="nav-link" th:classappend="${#strings.equals(pageTitle,'Books')} ? active : ''" 
+							th:href="@{/admin/book}">
+								<i class="fas fa-book mr-2"></i>Quản lý sách
+						</a></li>
+						<li class="nav-item"><a class="nav-link" th:classappend="${#strings.equals(pageTitle,'Orders')} ? active : ''" 
+							th:href="@{/admin/order}">
+						<i class="fas fa-shopping-cart mr-2"></i>Quản lý đơn hàng
+							</a></li>
+						<li class="nav-item"><a class="nav-link" th:classappend="${#strings.equals(pageTitle,'Reviews')} ? active : ''" 
+							th:href="@{/admin/review}"> 
+							<i class="far fa-comments mr-2"></i>Quản lý phản hồi
+						</a></li>
+						<li class="nav-item"><a class="nav-link" th:classappend="${#strings.equals(pageTitle,'Customers')} ? active : ''" 
+							th:href="@{/admin/customer}">   
+							<i class="fas fa-users mr-2"></i>Quản lý tài khoản
+						</a></li>
+						<li class="nav-item"><a class="nav-link" th:classappend="${#strings.equals(pageTitle,'Author')} ? active : ''" 
+							th:href="@{/admin/author}">   
+							<i class="fas fa-address-book mr-2"></i>Quản lý tác giả
+						</a></li>
+						<li class="nav-item"><a class="nav-link" th:classappend="${#strings.equals(pageTitle,'Category')} ? active : ''" 
+							th:href="@{/admin/category}">   
+							<i class="fas fa-th-list mr-2"></i></i>Quản lý thể loại
+						</a></li>
+						<li class="nav-item"><a class="nav-link" th:classappend="${#strings.equals(pageTitle,'Company')} ? active : ''" 
+							th:href="@{/admin/company}">   
+							<i class="fas fa-building mr-2"></i></i>Quản lý nhà xuất bản
+						</a></li>
+						<li class="nav-item"><a class="nav-link" th:classappend="${#strings.equals(pageTitle,'Warehouse')} ? active : ''"
+							th:href="@{/admin/warehouse}">
+							<i class="fas fa-archive"></i></i> Quản lý nhập kho
+						</a></li>
+					</ul>
+				</div>
+			</nav>
+</body>
+</html>

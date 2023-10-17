@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title th:replace="/admin/fragments/head-tag.html :: title">Title</title>
+<th:block th:insert="/admin/fragments/head-tag.html :: link"></th:block>
+<link th:href="@{/css/admin/userAddress.css}" rel="stylesheet">
+</head>
+
+<body>
+	<div id="toast"></div>
+	<div class="main__overlay animated fadeIn"></div>
+	<!-- ============================== HEADER ================================= -->
+	<div th:replace="/admin/fragments/header.html :: admin-header('none')"></div>
+
+	<div class="container-fluid">
+		<div class="row">
+
+			<!-- ================= NAVIGATION =================== -->
+			<nav
+				th:replace="/admin/fragments/navigation.html :: admin-nav('Customers')"></nav>
+
+			<!-- ===================MAIN CONTENT=================== -->
+			<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">	
+				<h3 class="text-center">Quản lý địa chỉ của: [[${user.username}]]</h3>
+				<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-1 mb-1 border-bottom">
+					<div class="m-2">
+					<form  method="post" th:action="@{/admin/customer/edit}">
+						<input type="hidden" class="id" name="id" th:value="${user.userId}" >
+						<button type="submit" class="btn btn-primary btn__turn--back">
+							<i class="fas fa-angle-double-left"> Trở về</i>
+						</button>
+						</form>
+					</div>
+					<div class="btn-toolbar mb-2 mb-md-0">
+						<div class="m-2">
+						<button type="button" class="btn btn-success btn__add--userAddress">
+							<i class="fas fa-plus"></i> New address
+						</button>
+					</div>
+					</div>
+				</div>
+				
+				<!-- TABLE VIEW -->
+				<div class="table-responsive rounded-top rounded-bottom">
+					<table class="table table-bordered" id="myTable">
+						<thead>
+							<tr class="table-warning">
+								<th scope="col">Địa chỉ cụ thể</th>
+								<th scope="col">Xã/Phường</th>
+								<th scope="col">Quận\Huyện</th>
+								<th scope="col">Tỉnh/Thành Phố</th>
+								<th class="align-middle" style="width: 10%;" scope="col">Alter</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="address : ${listAddress}">
+								<td th:text="${address.addressName}">##</td>
+								<td th:text="${address.village.villageName}">##</td>
+								<td th:text="${address.village.district.districtName}">##</td>
+								<td th:text="${address.village.district.province.provinceName}">##</td>
+
+								<td class="align-middle text-center">
+									<button type="button"
+										class="btn btn-warning m-1 btn__edit--userAddress">
+										<i class="far fa-edit"></i>
+									</button>
+									<button type="button" class="btn btn-danger btn__delete--userAddress"
+										th:id="${address.addressId}">
+										<i style="color: black;" class="far fa-trash-alt"></i>
+									</button> 
+									<input type="hidden" id="addressId" name="addressId"
+									th:value="${address.addressId}">
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<!-- ===============FORM ADD USER ADDRESS =========================-->
+				<form th:action="@{/admin/userAddress/save}" th:object="${address}"
+					method="post" enctype="multipart/form-data" class="from__add--userAddress animated bounceInDown">
+					<div class="card">
+						<div class="card-header ">
+							<span>NEW USER</span><i style="z-index: 1000;"
+								class="far fa-times-circle btn-close-from"></i>
+						</div>
+						<div class="card-body">
+								<!-- =================== FIELD ID ================== -->
+								<input type="hidden" class="id" id="userId" name="userId" th:value="${user.userId}" >
+								<input th:field="*{addressId}" id="addressId" type="hidden">
+								
+							<div class="form-row">
+								<!-- =================== FIELD TỈNH ================== -->
+								<div class="form-group col-md-12">
+									<label>Tỉnh\Thành phố</label>
+									<select class="form-control" id="province">
+										<option th:each="pro : ${province}"
+											th:utext="${pro.provinceName}" th:value="${pro.provinceId}"></option>
+									</select>
+								</div>
+							</div>
+							
+							<div class="form-row">
+								<!-- =================== FIELD HUYỆN ================== -->
+								<div class="form-group col-md-12">
+									<label >Quận\Huyện</label>
+									<select class="form-control" id="district">
+										<option th:each="dis : ${district}"
+											th:utext="${dis.districtName}" th:value="${dis.districtId}"></option>
+									</select>
+								</div>
+							</div>
+							
+							<div class="form-row">
+								<!-- =================== FIELD Xã ================== -->
+								<div class="form-group col-md-12">
+									<label> Xã </label>
+									<select th:field="*{village}" name="village" class="form-control" id="village">
+										<option th:each="vil : ${village}"
+											th:utext="${vil.villageName}" th:value="${vil.villageId}"></option>
+									</select>
+								</div>
+							</div>
+							
+							<div class="form-row">
+								<!-- =================== FIELD địa chỉ cụ thể ================== -->
+								<div class="form-group col-md-12">
+									<label>Địa chỉ cụ thể </label> <input th:field="*{addressName}"
+										 type="text" class="form-control"
+										placeholder="VD: thôn Hiệp Hưng">
+									<p class="form-message">Không hợp lệ !!</p>
+								</div>
+							</div>
+							
+							<!-- BUTTON SUBMIT -->
+							<div style="text-align: center;">
+								<button type="submit" class="btn btn-primary">Xác Nhận</button>
+							</div>
+						</div>
+					</div>
+				</form>
+				
+				<!-- ===============DIALOG DELETE USER ADDRESS =======================-->
+				<form th:action="@{/admin/userAddress/delete}" class="from__confirm"
+					th:method="post">
+					<div class="card">
+						<div class="card-header">Xác nhận xóa</div>
+
+						<div class="card-body" style="text-align: center;">
+							<p class="card-text ">
+								Bạn chắc chắn muốn xóa địa chỉ có id: <strong id="userAddress-id"></strong>
+								<input type="text" class="form-control input-delete d-none"
+									name="id" th:value="${address.addressId}">
+								<input type="hidden" class="id" name="userId" th:value="${user.userId}" >
+							</p>
+							<div class="btns-comfirm d-flex justify-content-end">
+
+								<a href="#" class="btn btn-secondary btn-cancel mr-3">Hủy</a>
+
+								<button type="submit" class="btn btn-primary">Xác Nhận</button>
+
+							</div>
+
+						</div>
+					</div>
+				</form>
+			</main>
+		</div>
+	</div>
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script th:src="@{/script/adminJs/headerHandle.js}"></script>
+	<script th:src="@{/script/adminJs/userAddress.js}"></script>
+	<script th:src="@{/script/adminJs/popup.js}"></script>
+	<script th:src="@{/script/validate_input.js}"></script>
+	<script th:inline="javascript">
+	
+	const province = document.getElementById("province");
+	const district = document.getElementById("district");
+	const village = document.getElementById("village");
+	/*<![CDATA[*/
+	    var successMes = /*[[${successMes}]]*/ 'default';
+	    var erorrMes = /*[[${erorrMes}]]*/ 'default';
+	/*]]>*/
+	checkPopup(successMes,erorrMes)
+	
+	function getProvince() {
+		$.ajax({ type : 'GET',
+			url : '/api/address/province',
+			success : function(data) {
+				province.innerHTML = "";
+		         data.forEach(item => {
+		             let e = document.createElement('option');
+		             e.setAttribute("value",item.provinceId);
+		             e.innerHTML = item.provinceName;
+		             province.appendChild(e);
+		         })
+		           getDistrict(data[0].provinceId);
+			}
+		})
+		}
+		function getDistrict(provinceId) {
+			$.ajax({ type : 'GET',
+   				url : '/api/address/district/'+provinceId,
+   				success : function(data) {
+   					 district.innerHTML = "";
+   			            data.forEach(item => {
+   			                let e = document.createElement('option');
+   			                e.setAttribute("value",item.districtId);
+   			                e.innerHTML = item.districtName;
+   			                district.appendChild(e);
+   			                
+   			            })
+   			       getVillage(data[0].districtId);     
+   				}
+   			})
+		}
+		
+		function getVillage(districtId) {
+			$.ajax({ type : 'GET',
+   				url : '/api/address/village/'+districtId,
+   				success : function(data) {
+   					village.innerHTML = "";
+   			            data.forEach(item => {
+   			                let e = document.createElement('option');
+   			                e.setAttribute("value",item.villageId);
+   			                e.innerHTML = item.villageName;
+   			             village.appendChild(e);
+   			            })
+   			            
+   				}
+   			})
+		}
+		
+		//Load address to EDIT
+		function getAddress(addressId) {
+			 var id = $(this).parent().find('#addressId').val();
+			 
+			$.ajax({ type : 'GET',
+   				url : '/api/address/'+addressId,
+   				success : function(data) {
+   					$('#province option').removeAttr('selected').filter('[value='+data[4]+']').attr('selected', true)
+   					$('#district option').removeAttr('selected').filter('[value='+data[3]+']').attr('selected', true)
+   					$('#village option').removeAttr('selected').filter('[value='+data[2]+']').attr('selected', true)
+   			        $("#addressName").val(data[1])
+   			        $('.card-body #addressId').val(data[0]);
+   					console.log(data[0])
+   				}
+   			})
+		}
+		 $(".btn__edit--userAddress").on('click',function(){
+			 var id = $(this).parent().find('#addressId').val();console.log(id)
+			 getAddress(id)
+		 })
+		
+		 
+		document.addEventListener("DOMContentLoaded",function () {  
+		   province.addEventListener("change",function () {
+		       getDistrict(this.value); 
+		   });
+		   district.addEventListener("change",function () {
+			   getVillage(this.value);
+		   });
+		  
+		})
+	</script>
+
+
+</body>
+</html>

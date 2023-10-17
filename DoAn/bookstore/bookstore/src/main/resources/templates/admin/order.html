@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title th:replace = "/admin/fragments/head-tag.html :: title">Title</title>
+	<th:block th:insert="/admin/fragments/head-tag.html :: link"></th:block>
+	<link th:href="@{/css/admin/order.css}" rel="stylesheet">
+	<link th:href="@{/css/admin/popup.css}" rel="stylesheet">
+</head>
+
+<body>
+	<div id="toast"></div>
+	<div class="main__overlay animated fadeIn"></div>
+	<!-- ============================== HEADER ================================= -->
+	<div th:replace="/admin/fragments/header.html :: admin-header('none')"></div>
+
+	<div class="container-fluid">
+		<div class="row">
+
+			<!-- ================= NAVIGATION =================== -->
+			<nav th:replace="/admin/fragments/navigation.html :: admin-nav('Orders')"></nav>
+
+
+			<!-- ===================MAIN CONTENT=================== -->
+			<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+				<div
+					class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-1 mb-1 border-bottom">
+					<div class="m-2 col-md-6">
+						<div class="btn-group" role="group"
+							aria-label="Basic outlined example">
+							<a th:if="${status == -1}" class="btn btn-outline-primary active">Tất
+								cả</a> <a th:unless="${status == -1}"
+								class="btn btn-outline-primary"
+								th:href="@{'/admin/order/1'  + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + '&status=-1' }">Tất
+								cả</a> <a th:if="${status == 2}"
+								class="btn btn-outline-primary active">Đã xác nhận</a> <a
+								th:unless="${status == 2}" class="btn btn-outline-primary"
+								th:href="@{'/admin/order/1' + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + '&status=2' }">Đã
+								xác nhận</a> <a th:if="${status == 1}"
+								class="btn btn-outline-primary active">Chờ xác nhận</a> <a
+								th:unless="${status == 1}" class="btn btn-outline-primary"
+								th:href="@{'/admin/order/1' + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + '&status=1' }">Chờ
+								xác nhận</a> <a th:if="${status == 3}"
+								class="btn btn-outline-primary active">Yêu cầu hủy</a> <a
+								th:unless="${status == 3}" class="btn btn-outline-primary"
+								th:href="@{'/admin/order/1' + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + '&status=3' }">
+								Yêu cầu hủy</a> <a th:if="${status == 4}"
+								class="btn btn-outline-primary active">Đã Hủy</a> <a
+								th:unless="${status == 4}" class="btn btn-outline-primary"
+								th:href="@{'/admin/order/1'  + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + '&status=4' }">Đã
+								Hủy</a>
+
+						</div>
+					</div>
+					
+					<!-- find book -->
+					<form class="form-inline col-md-5 form-search-order" th:action="@{/admin/order/search}">
+						<div class="form-row">
+							<input type="text" class="form-control input-delete d-none" name="statusOrderSearch" th:value="${status}">
+							<div class="form-group col-md-5">
+								<label for="datepickerfrom">Ngày bắt đầu:</label> 
+								<input name="startDate" class="form-control col-md-12 start-Date" id="datepickerfrom"  type="date" />
+								<p class="form-message" >Không hợp lệ !!</p>
+								
+							</div>
+							<div class="form-group col-md-5">
+								<label for="datepickerfrom">Ngày kết thúc:</label> 
+								<input name="endDate" class="form-control col-md-12 end-Date" id="datepickerfrom"  type="date" />
+								<p class="form-message" >Không hợp lệ !!</p>
+							</div>
+							<div class="form-group col-md-2">
+								<button class="btn btn-secondary my-2 my-sm-0" type="submit" style="color: white">
+									<i class="fas fa-search"></i>
+								</button>
+							</div>
+						</div>		
+					</form>
+
+					<br>
+				</div>
+				<!-- TABLE VIEW -->
+				<div class="table-responsive rounded-top rounded-bottom">
+					<table class="table table-bordered" id="myTable">
+						<thead>
+							<tr class="table-warning">
+								<th class="align-middle text-center" scope="col"><a
+									th:href="@{'/admin/order/' + ${currentPage} + '?sortField=orderId&sortDir=' +${reverseSortDir} + '&status=' + ${status}} ">ID</a></th>
+								</th>
+								<th class="align-middle text-center" scope="col"><a
+									th:href="@{'/admin/order/' + ${currentPage} + '?sortField=nameOfCustomer&sortDir=' +${reverseSortDir} + '&status=' + ${status}} ">Khách
+										hàng</a></th>
+								<th class="align-middle text-center" scope="col"><a
+									th:href="@{'/admin/order/' + ${currentPage} + '?sortField=orderDay&sortDir=' +${reverseSortDir} + '&status=' + ${status}} ">Thời
+										gian</a></th>
+								<th class="align-middle text-center" style="width: 15%"
+									scope="col">Giá</th>
+								<th class="align-middle text-center" style="width: 15%"
+									scope="col">Trạng thái</th>
+								<th class="align-middle" style="width: 10%;" scope="col">Alter</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="order : ${listOrder}">
+								<input type="hidden" id="orderId" name="orderId"
+									th:value="${order.orderId}">
+								<td class="align-middle text-center" th:text="${order.orderId}">##</td>
+								<td class="align-middle" th:text="${order.nameOfCustomer}">##</td>
+								<td class="align-middle text-center" th:text="${order.orderDay}">##</td>
+								<td class="align-middle text-center"
+									th:text="${#numbers.formatDecimal(order.totalPrice,3,0)}">##</td>
+
+
+								<!-- status order -->
+								<td>
+
+									<p th:if="${order.orderStatus == 2}">Đã Giao</p> <a
+									th:if="${order.orderStatus == 1}"
+									class="btn btn-outline-primary btn__change--status"> <input
+										type="hidden" th:id="${order.orderId}" name="actionStatus"
+										th:value="@{'/admin/order/save/' + ${currentPage} + '?idOrder=' + ${order.orderId} + '&statusNew=2' + '&statusOld='  + ${status} }">Xác
+										nhận
+								</a> <a th:if="${order.orderStatus == 1}"
+									class="btn btn-outline-primary btn__change--status"> <input
+										type="hidden" th:id="${order.orderId}" name="actionStatus"
+										th:value="@{'/admin/order/save/'  + ${currentPage} + '?idOrder=' + ${order.orderId} + '&statusNew=4' + '&statusOld=' + ${status} }">Hủy
+								</a> <a th:if="${order.orderStatus == 3}"
+									class="btn btn-outline-primary btn__change--status"> <input
+										type="hidden" th:id="${order.orderId}" name="actionStatus"
+										th:value="@{'/admin/order/save/'  + ${currentPage} + '?idOrder=' + ${order.orderId} + '&statusNew=4' + '&statusOld=' + ${status} }">Xác
+										nhận hủy
+								</a>
+
+									<p th:if="${order.orderStatus == 4}">Đã Hủy</p>
+
+								</td>
+
+	
+								<td class="align-middle text-center">
+									<button type="button" id="button_detail"
+										class="btn btn-warning m-1 btn__edit--order">
+										Chi tiết
+										<!-- <i class="far fa-edit"></i> -->
+									</button> <input type="hidden" id="orderId" name="OrderId"
+									th:value="${order.orderId}">
+								</td>
+							</tr>
+						</tbody>
+					</table>
+
+
+					<div th:if="${totalPage > 1}">
+						<!-- old page -->
+						<div class="row col-sm-10">
+							<div class="col-sm-2">Total Items: [[${totalItem}]]</div>
+								<a class="btn btn-outline-primary" th:if="${currentPage > 1}"
+									th:href="@{'/admin/order/' + ${pageFirst}  + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + '&status=' + ${status}}">First</a>
+								<span class="btn btn-outline-primary active" th:unless="${currentPage > 1}">First</span>&nbsp; &nbsp;
+								<a class="btn btn-outline-primary" th:if="${currentPage > 1 }"
+									th:href="@{'/admin/order/' + ${currentPage -1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}  + '&status=' + ${status}}">Previous</a>
+								<span class="btn btn-outline-primary active" th:unless="${currentPage > 1}">Previous </span>&nbsp; &nbsp;
+							
+								<!-- nếu số trang nhỏ hơn 7 -->
+								<th:block th:if="${totalPage <= 7}">
+								<span th:each="i : ${#numbers.sequence(1, totalPage)}">
+											<a class="btn btn-outline-primary" th:if="${currentPage != i}"
+											th:href="@{'/admin/order/' + ${i} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + '&status=' + ${status} }">[[${i}]]</a>
+											<span class="btn btn-outline-primary active" th:unless="${currentPage != i}">[[${i}]]</span> &nbsp;
+										</span>
+								</th:block>
+								
+								<!-- nếu số trang lớn hơn 7 -->
+								<th:block th:if="${totalPage > 7}">
+									<!-- nếu vị trí đang chọn ở đoạn đầu hoặc đoạn cuối -->
+									<th:block th:if="${currentPage <=3 || currentPage >= totalPage-1}">
+										<span th:each="i : ${#numbers.sequence(1, 3)}">
+											<a class="btn btn-outline-primary" th:if="${currentPage != i}"
+											th:href="@{'/admin/order/' + ${i} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + '&status=' + ${status} }">[[${i}]]</a>
+											<span class="btn btn-outline-primary active" th:unless="${currentPage != i}">[[${i}]]</span> &nbsp;
+										</span>
+										
+										<a class="btn btn-outline-primary" th:href="@{'/admin/order/' + 4 + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + '&status=' + ${status} }">...</a>&nbsp;
+										
+										<span th:each="i : ${#numbers.sequence(totalPage-1, totalPage)}">
+											<a class="btn btn-outline-primary" th:if="${currentPage != i}"
+											th:href="@{'/admin/order/' + ${i} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + '&status=' + ${status} }">[[${i}]]</a>
+											<span class="btn btn-outline-primary active" th:unless="${currentPage != i}">[[${i}]]</span> &nbsp;
+										</span>
+									</th:block>
+									<!-- nếu vị trí đang chọn ở đoạn giữa giữa -->
+									<th:block th:if="${currentPage > 3 && currentPage < totalPage-1}">
+										<a class="btn btn-outline-primary" th:href="@{'/admin/order/' + ${currentPage-2} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + '&status=' + ${status} }">...</a>&nbsp;
+										
+										<span th:each="i : ${#numbers.sequence(currentPage-2, currentPage+2)}">
+											<a class="btn btn-outline-primary" th:if="${currentPage != i}"
+											th:href="@{'/admin/order/' + ${i} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + '&status=' + ${status} }">[[${i}]]</a>
+											<span class="btn btn-outline-primary active" th:unless="${currentPage != i}">[[${i}]]</span> &nbsp;
+										</span>
+										
+										<a class="btn btn-outline-primary" th:href="@{'/admin/order/' +  ${currentPage+2} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + '&status=' + ${status} }">...</a>&nbsp;
+									</th:block>
+									
+								</th:block>
+
+
+								<a class="btn btn-outline-primary" th:if="${currentPage < totalPage }"
+									th:href="@{'/admin/order/' + ${currentPage +1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}  + '&status=' + ${status}}">Next</a>
+								<span class="btn btn-outline-primary active" th:unless="${currentPage < totalPage}">Next </span>&nbsp;&nbsp;
+								<a class="btn btn-outline-primary" th:if="${currentPage < totalPage}"
+									th:href="@{'/admin/order/'+${totalPage} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + '&status=' + ${status} }">Last</a>
+								<span class="btn btn-outline-primary active" th:unless="${currentPage < totalPage}">Last</span>
+
+						</div>
+					</div> 
+				</div>
+
+
+					<div class="container-order-detail animated bounceInDown" >
+						<article class="card">
+							
+								
+						</article>
+					</div>
+
+					<!-- ===============DIALOG COMFIRM =======================-->
+					<form class="from__confirm">
+						<div class="card">
+							<div class="card-header">Thông báo</div>
+
+							<div class="card-body" style="text-align: center;">
+								<p class="card-text ">
+									<strong id="order-id"></strong>
+								<div class="btns-comfirm d-flex justify-content-end">
+
+									<div class="btn btn-secondary btn-cancel mr-3">Hủy</div>
+
+									<a th:href="s" id="action-change" type="submit"
+										class="btn btn-primary">Đồng ý</a>
+
+								</div>
+
+							</div>
+						</div>
+					</form>
+			</main>
+		</div>
+	</div>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script th:src="@{/script/adminJs/headerHandle.js}"></script>
+	<script th:src="@{/script/adminJs/order.js}"></script>
+	<script th:src="@{/script/adminJs/popup.js}"></script>
+	<script th:src="@{/script/validate_input.js}"></script>
+	<script th:inline="javascript">
+	Validator({
+        form: '.form-search-order',
+        rules:[
+          Validator.isRequired('.start-Date','Vui lòng chọn ngày bắt đầu'),
+          Validator.isRequired('.end-Date','Vui lòng chọn ngày kết thúc')
+        ]
+      });
+		$(document).ready(function() {
+			$('table #button_detail').on('click',function() {
+				var id = $(this).parent().find('#orderId').val();
+				$.ajax({ type : 'GET',
+							url : '/api/admin/order/'+ id,
+							success : function(data) {
+								var row = document.querySelector(".container-order-detail .card");
+								row.innerHTML = data;
+							}
+						})
+			});
+		});
+		/*<![CDATA[*/
+		    var successMes = /*[[${successMes}]]*/ 'default';
+		    var erorrMes = /*[[${erorrMes}]]*/ 'default';
+		/*]]>*/
+		checkPopup(successMes,erorrMes)
+		
+	</script>
+</body>
+</html>

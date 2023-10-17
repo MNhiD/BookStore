@@ -1,0 +1,76 @@
+@charset "ISO-8859-1";
+
+input[type=number]::-webkit-outer-spin-button, input[type=number]::-webkit-inner-spin-button
+{
+	-webkit-appearance: inner-spin-button !important;
+	width: 25px;
+	position: absolute;
+	top: 0;
+	right: 0;
+	height: 100%;
+}
+/*========= FORM ADD BOOK STYLE========= */
+
+.from__add--userAddress {
+	position: fixed;
+	width: 40%;
+	height: 70%;
+	left: 35%;
+	top: 3%;
+	transform: translateX(-50%);
+	background-color: white;
+	z-index: 10000;
+	display: none;
+	border-radius: 15px;
+}
+
+.from__add--userAddress .card-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 8px;
+}
+
+.from__add--userAddress .form-group {
+	margin-bottom: 5px;
+}
+
+.form-message{
+	visibility: hidden;
+	margin:2px 0 0 4px; 
+	color:red; 
+	font-size: 10px
+}
+
+.form-message.invalid{
+	visibility: visible;
+}
+
+.btn-close-from {
+	font-size: 32px;
+	cursor: pointer;
+}
+
+.btn-close-from:hover {
+	color: #218838;
+	border-color: #1e7e34;
+}
+
+.box-options{
+	position: absolute;
+	top:85%;
+	z-index: 999;
+	width: 98%;
+	display: none;
+}
+
+.display-img{
+	display:flex;
+	height: 95%; 
+	width: 90%; 
+	justify-content: center; 
+	align-items: center;
+}
+
+
+

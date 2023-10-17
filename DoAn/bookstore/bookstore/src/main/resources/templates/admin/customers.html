@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title th:replace="/admin/fragments/head-tag.html :: title">Title</title>
+<th:block th:insert="/admin/fragments/head-tag.html :: link"></th:block>
+<link th:href="@{/css/admin/customer.css}" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css" rel="stylesheet"/>
+<link th:href="@{/css/admin/popup.css}" rel="stylesheet">
+</head>
+
+<body>
+	<div id="toast"></div>
+	<div class="main__overlay animated fadeIn"></div>
+	<!-- ============================== HEADER ================================= -->
+	<div th:replace="/admin/fragments/header.html :: admin-header('/admin/customer/search')"></div>
+
+	<div class="container-fluid">
+		<div class="row">
+
+			<!-- ================= NAVIGATION =================== -->
+			<nav
+				th:replace="/admin/fragments/navigation.html :: admin-nav('Customers')"></nav>
+
+			<!-- ===================MAIN CONTENT=================== -->
+			<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+				<div
+					class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-1 mb-1 border-bottom">
+					<div class="m-2">
+						<form method="get" th:action="@{'/admin/customer/Add/' + ${currentPage}}">
+							<input type="hidden"  name="sortField" th:value="${sortField}"> 
+							<input type="hidden"  name="sortDir" th:value="${sortDir}">
+							<button type="submit" class="btn btn-success">New User</button> 
+						</form> 
+					</div>
+				</div>
+
+				<!-- TABLE VIEW -->
+				<div class="table-responsive rounded-top rounded-bottom">
+					<table class="table table-bordered" id="myTable">
+						<thead>
+							<tr class="table-warning">
+								<th scope="col"><a
+									th:href="@{'/admin/customer/' + ${currentPage} + '?sortField=userId&sortDir=' +${reverseSortDir}} ">Mã</a>
+								</th>
+
+								<th scope="col"><a
+									th:href="@{'/admin/customer/' + ${currentPage} + '?sortField=username&sortDir=' +${reverseSortDir}} ">Tên
+										người dùng</a></th>
+
+								<th scope="col"><a
+									th:href="@{'/admin/customer/' + ${currentPage} + '?sortField=email&sortDir=' +${reverseSortDir}} ">Email</a>
+								</th>
+
+								<th scope="col"><a
+									th:href="@{'/admin/customer/' + ${currentPage} + '?sortField=phone&sortDir=' +${reverseSortDir}} ">SĐT</a>
+								</th>
+								<th class="align-middle" style="width: 10%;" scope="col">Alter</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="user : ${listUser}">
+								<td th:text="${user.userId}">##</td>
+								<td th:text="${user.username}">##</td>
+								<td th:text="${user.email}">##</td>
+								<td th:text="${user.phone}">##</td>
+
+								<td class="align-middle d-flex align-items-center">
+									<form method="post" th:action="@{/admin/customer/edit}">
+										<input type="hidden" class="id" name="id"
+											th:value="${user.userId}"> 
+										<button type="submit" class="btn btn-warning m-1">
+											<i class="far fa-eye"></i>
+										</button>
+									</form>
+<!--									<button type="button" class="btn btn-danger btn__delete&#45;&#45;user" style="width: 44px;height: 38px;"-->
+<!--										th:id="${user.userId}">-->
+<!--										<i style="color: black;" class="far fa-trash-alt"></i>-->
+<!--									</button> -->
+									<input type="hidden" id="userId" name="userId"
+									th:value="${user.userId}">
+								</td>
+							</tr>
+						</tbody>
+					</table>
+
+
+					<div th:if="${totalPage > 1}">
+						<div class="row col-sm-10">
+							<div class="col-sm-2">Total Items: [[${totalItem}]]</div>
+							
+							<a class="btn btn-outline-primary" th:if="${currentPage > 1}"
+								th:href="@{'/admin/customer/' + ${pageFirst}  + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">First</a>
+							<span class="btn btn-outline-primary active" th:unless="${currentPage > 1}">First</span>&nbsp;&nbsp;
+							
+							<span th:each="i : ${#numbers.sequence(1, totalPage)}"> <a
+								class="btn btn-outline-primary" th:if="${currentPage != i}"
+								th:href="@{'/admin/customer/' + ${i} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} }">[[${i}]]</a>
+								<span class="btn btn-outline-primary active" th:unless="${currentPage != i}">[[${i}]]</span> &nbsp;
+							</span>
+							
+							<a th:if="${currentPage < totalPage}"
+								class="btn btn-outline-primary" th:href="@{'/admin/customer/' + ${currentPage +1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} }">Next</a>
+							<span class="btn btn-outline-primary active" th:unless="${currentPage < totalPage}">Next </span>&nbsp;&nbsp;
+							
+							<a th:if="${currentPage < totalPage}"
+								class="btn btn-outline-primary" th:href="@{'/admin/customer/'+${totalPage} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} }">Last</a>
+							<span class="btn btn-outline-primary active" th:unless="${currentPage < totalPage}">Last</span>
+						</div>
+
+					</div>
+
+				</div>
+				<!-- ===============FORM ADD USER =========================-->
+				<form th:action="@{/admin/customer/save}" th:object="${user}"
+									method="post" enctype="multipart/form-data" class="from__add--user animated bounceInDown">
+				
+					<div class="card">
+						<div class="card-header ">
+							<span>Tạo Đơn NHập </span>
+							<a style="color:white" th:href="@{'/admin/customer/' + ${currentPage}  + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">
+							<i style="z-index: 1000;" class="far fa-times-circle btn-close-from"></i></a>
+						</div>
+						<div class="card-body ">
+							<div class="form-row">
+								<!-- =================== FIELD ID ================== -->
+								<input th:field="*{userId}" type="hidden" id="user-form-id">
+
+								<!-- =================== FIELD TÊN NGƯỜI DÙNG ================== -->
+								<div class="form-group col-md-6">
+									<div class="form-group col-md-12">
+										<label for="user-name">Tên đăng nhập</label> <input
+											th:field="*{username}" type="text" class="form-control"
+											id="user-name" placeholder="VD: vanTeo">
+										<p class="form-message">Không hợp lệ !!</p>
+										<p th:if="${existUsername==true}" class="form-message invalid">Tên
+											người dùng này đã được sử dụng !!</p>
+									</div>
+								</div>
+								<!-- =================== FIELD TUỔI ================== -->
+								<div class="form-group col-md-6">
+									<div class="form-group col-md-12">
+										<label for="user-age">Năm sinh</label> <input th:field="*{age}"
+											type="text" class="form-control" id="datepicker"
+											placeholder="VD: 2018" autocomplete="off" disabled>
+										<p class="form-message">Không hợp lệ !!</p>
+									</div>
+								</div>
+							</div>
+
+
+							<div class="form-row">
+								<!-- =================== FIELD GIỚI TÍNH ================== -->
+								<div class="form-group col-md-6">
+									<div class="form-group col-md-12">
+										<label for="user-gender">Giới tính</label>
+										<!-- <input th:field="*{gender}" type="text" class="form-control" id="user-gender" placeholder="VD: vanTeo">
+										<p class="form-message" >Không hợp lệ !!</p> -->
+										<select th:field="*{gender}" class="form-control"
+											id="user-gender" disabled>
+											<option th:value="'0'" th:text="Nam"></option>
+											<option th:value="'1'" th:text="Nữ"></option>
+										</select>
+									</div>
+								</div>
+								<!-- =================== FIELD SĐT ================== -->
+								<div class="form-group col-md-6">
+									<div class="form-group col-md-12">
+										<label for="user-phone">SĐT</label> <input th:field="*{phone}"
+											type="text" class="form-control" id="user-phone"
+											placeholder="VD: 0325436152" disabled>
+										<p class="form-message">Không hợp lệ !!</p>
+										<p th:if="${existPhone==true}" class="form-message invalid">SĐT
+											đã được sử dụng !!</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="form-row">
+								<!-- =================== FIELD EMAIL ================== -->
+								<div class="form-group col-md-6">
+									<div class="form-group col-md-12">
+										<label for="user-email">Email</label> <input
+											th:field="*{email}" type="text" class="form-control"
+											id="user-email" placeholder="VD: vanTeo@gmail.com" disabled>
+										<p class="form-message">Không hợp lệ !!</p>
+										<p th:if="${existEmail==true}" class="form-message invalid">Email
+											đã được sử dụng !!</p>
+									</div>
+								</div>
+
+								<!-- =================== FIELD Mật khẩu ================== -->
+								<div th:if="${idEdit != true}" class="form-group col-md-6">
+									<div class="form-group col-md-12">
+										<label for="user-pass">Mật khẩu</label> <input
+											th:field="*{password}" type="password" class="form-control"
+											id="user-pass" placeholder="">
+										<p class="form-message">Không hợp lệ !!</p>
+									</div>
+								</div>
+
+								<!-- =================== Danh sách địa chỉ user ================== -->
+								<div th:if="${idEdit == true}" class="form-group col-md-6">
+									<div class="form-group col-md-12">
+										<label>Địa chỉ</label>
+										<div class="d-flex align-items-center">
+											<select name="villageId" class="form-control" id="list-village">
+												<option th:each="addr : ${address}"
+													th:utext="${addr.addressName}"></option>
+											</select>
+<!--											<a class="btn btn-outline-warning ml-2" id="linkAddress"-->
+<!--												th:href="@{'/admin/userAddress'+'?id='}"><i-->
+<!--												class="fas fa-pencil-alt"></i></a>-->
+										</div>
+									</div>
+									<input name="addressName" class="form-control"  type="hidden">
+									<input name="villageId"  class="form-control"  type="hidden" >
+								</div>
+							</div>
+
+							<div class="form-row">
+								<th:block th:if="${idEdit != true}">
+									<!-- =================== FIELD TỈNH ================== -->
+									<div class="form-group col-md-3">
+										<div class="form-group col-md-12">
+											<label>Tỉnh\Thành phố</label> <select class="form-control"
+												id="province">
+
+												<option th:each="pro : ${province}"
+													th:utext="${pro.provinceName}" th:value="${pro.provinceId}"></option>
+											</select>
+										</div>
+									</div>
+
+									<!-- =================== FIELD HUYỆN ================== -->
+									<div class="form-group col-md-3">
+										<div class="form-group col-md-12">
+											<label>Quận\Huyện</label> <select class="form-control"
+												id="district">
+												<option th:each="dis : ${district}"
+													th:utext="${dis.districtName}" th:value="${dis.districtId}"></option>
+											</select>
+										</div>
+									</div>
+
+
+									<!-- =================== FIELD Nhập lại mật khẩu ================== -->
+									<div class="form-group col-md-6">
+										<div class="form-group col-md-12">
+											<label for="user-confirm">Nhập lại mật khẩu</label> <input
+												type="password" class="form-control" id="user-confirm"
+												placeholder="">
+											<p class="form-message">Không hợp lệ !!</p>
+										</div>
+									</div>
+								</th:block>
+							</div>
+
+							<th:block th:if="${idEdit != true}">
+								<div class="form-row">
+									<!-- =================== FIELD Xã ================== -->
+									<div class="form-group col-md-6">
+										<div class="form-group col-md-12">
+											<label> Xã </label> <select name="villageId"
+												class="form-control" id="village">
+												<option th:each="vil : ${village}"
+													th:utext="${vil.villageName}" th:value="${vil.villageId}"></option>
+											</select>
+										</div>
+									</div>
+
+									<!-- =================== FIELD địa chỉ cụ thể ================== -->
+									<div class="form-group col-md-6">
+										<div class="form-group col-md-12">
+											<label>Địa chỉ cụ thể </label> <input name="addressName"
+												type="text" class="form-control" id="address"
+												placeholder="VD: thôn Hiệp Hưng">
+											<p class="form-message">Không hợp lệ !!</p>
+										</div>
+									</div>
+								</div>
+							</th:block>
+
+							<!-- BUTTON SUBMIT -->
+<!--							<div style="text-align: center;">-->
+<!--								<button type="submit" class="btn btn-primary">Xác Nhận</button>-->
+<!--							</div>-->
+						</div>
+					</div>
+				</form>
+
+				<!-- ===============DIALOG DELETE =======================-->
+				<form th:action="@{/admin/customer/delete}" class="from__confirm"
+					th:method="post">
+					<div class="card">
+						<div class="card-header">Xác nhận xóa</div>
+
+						<div class="card-body" style="text-align: center;">
+							<p class="card-text ">
+								Bạn chắc chắn muốn xóa khách hàng có id: <strong id="user-id"></strong>
+								<input type="text" class="form-control input-delete d-none"
+									name="id" th:value="${user.userId}">
+							</p>
+							<div class="btns-comfirm d-flex justify-content-end">
+
+								<a style="color: white;cursor: pointer;" class="btn btn-secondary btn-cancel mr-3">Hủy</a>
+
+								<button type="submit" class="btn btn-primary">Xác Nhận</button>
+
+							</div>
+
+						</div>
+					</div>
+				</form>
+			</main>
+		</div>
+	</div>
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script th:src="@{/script/adminJs/headerHandle.js}"></script>
+	<script th:src="@{/script/adminJs/customer.js}"></script>
+	<script th:src="@{/script/validate_input.js}"></script>
+	<script th:src="@{/script/adminJs/popup.js}"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
+	<script th:inline="javascript">
+		Validator({
+			form : '.from__add--user',
+			rules : [
+					Validator.isRequired('#user-name'),
+					Validator.isNum('#user-phone',10),
+					Validator.checkAge('#datepicker',10),
+					Validator.isEmail('#user-email'),
+					Validator.isRequired('#user-pass'),
+					Validator.confirmMes('#user-confirm', '#user-pass',
+							'Mật khẩu nhập lại không hợp lệ') ]
+		});
+		/*<![CDATA[*/
+		    var successMes = /*[[${successMes}]]*/ 'default';
+		    var erorrMes = /*[[${erorrMes}]]*/ 'default';
+		/*]]>*/
+		checkPopup(successMes,erorrMes)
+		
+		/*<![CDATA[*/
+		var isAdd = /*[[${isAdd}]]*/'default';
+
+		//kiểm tra nếu them user nhận về lỗi thì hiện form nhập và hiện lại các thông tin vừa nhập
+		if (isAdd) {
+			addAndEditNewUser();
+			$('#user-name').val("");
+			$('#datepicker').val("");
+			$('#user-pass').val("");
+		}
+		/*]]>*/
+		
+		
+		/*<![CDATA[*/
+		var isError = /*[[${isError}]]*/'default';
+
+		//kiểm tra nếu them user nhận về lỗi thì hiện form nhập và hiện lại các thông tin vừa nhập
+		if (isError) {
+			var user2 = /*[[${user2}]]*/'default';
+			$('#user-form-id').val(user2.userId);
+			$('#user-name').val(user2.username);
+			$('#datepicker').val(user2.age);
+			$('#user-phone').val(user2.phone);
+			$('#user-email').val(user2.email);
+			$('#user-pass').val(user2.password);
+			$('#user-confirm').val(user2.password);
+			var listAddress=user2.setAddress.map((ele,i)=>
+				"<option value="+ele.village.villageId+">"+ele.addressName+"-"+ele.village.villageName+"</option>")
+			$("#list-village").html(listAddress)
+			$("#linkAddress").attr("href",$("#linkAddress").attr("href")+user2.userId)
+			console.log(user2)
+		}
+		/*]]>*/
+		
+		
+		
+		/*<![CDATA[*/
+		var idEdit = /*[[${idEdit}]]*/'default';
+
+		//kiểm tra nếu them user nhận về lỗi thì hiện form nhập và hiện lại các thông tin vừa nhập
+		if (idEdit) {
+			addAndEditNewUser("EDIT USER","#FFC107")
+			const province = document.querySelector(".province");
+			var address2 = /*[[${address2}]]*/'default';
+			var user3 = /*[[${user3}]]*/'default';
+			if(user3){
+				$('#user-form-id').val(user3.userId);
+				$('#user-name').val(user3.username);
+				$('#user-name').attr('readOnly','true');
+				$('#datepicker').val(user3.age);
+				$('#user-phone').val(user3.phone);
+				$('#user-email').val(user3.email);
+				$('#user-pass').val(user3.password);
+				$('#user-confirm').val(user3.password);
+				
+				var listAddress=user3.setAddress.map((ele,i)=>
+					"<option value="+ele.village.villageId+">"+ele.addressName+"-"+ele.village.villageName+"</option>")
+				$("#list-village").html(listAddress)
+				$("#linkAddress").attr("href",$("#linkAddress").attr("href")+user3.userId)
+				console.log(user3)
+			}
+			
+		}
+		/*]]>*/
+		
+
+    	const province = document.getElementById("province");
+    	const district = document.getElementById("district");
+    	const village = document.getElementById("village");
+    	function getProvince() {
+    		$.ajax({ type : 'GET',
+				url : '/api/address/province',
+				success : function(data) {
+					province.innerHTML = "";
+			         data.forEach(item => {
+			             let e = document.createElement('option');
+			             e.setAttribute("value",item.provinceId);
+			             e.innerHTML = item.provinceName;
+			             province.appendChild(e);
+			         })
+			           getDistrict(data[0].provinceId);
+				}
+			})
+    		}
+    		function getDistrict(provinceId) {
+    			$.ajax({ type : 'GET',
+       				url : '/api/address/district/'+provinceId,
+       				success : function(data) {1
+       					 district.innerHTML = "";
+       			            data.forEach(item => {
+       			                let e = document.createElement('option');
+       			                e.setAttribute("value",item.districtId);
+       			                e.innerHTML = item.districtName;
+       			                district.appendChild(e);
+       			                
+       			            })
+       			       getVillage(data[0].districtId);     
+       				}
+       			})
+    		}
+    		
+    		function getVillage(districtId) {
+    			$.ajax({ type : 'GET',
+       				url : '/api/address/village/'+districtId,
+       				success : function(data) {1
+       					village.innerHTML = "";
+       			            data.forEach(item => {
+       			                let e = document.createElement('option');
+       			                e.setAttribute("value",item.villageId);
+       			                e.innerHTML = item.villageName;
+       			             village.appendChild(e);
+       			            })
+       			            
+       				}
+       			})
+    		}
+        	
+    		document.addEventListener("DOMContentLoaded",function () {  
+    		   province.addEventListener("change",function () {
+    		       getDistrict(this.value); 
+    		   });
+    		   district.addEventListener("change",function () {
+    			   getVillage(this.value);
+    		   });
+    		  
+    		})
+       
+			$("#datepicker").datepicker({
+			    format: "yyyy",
+			    viewMode: "years", 
+			    minViewMode: "years"
+			});
+    		
+    		
+	</script>
+
+
+</body>
+</html>

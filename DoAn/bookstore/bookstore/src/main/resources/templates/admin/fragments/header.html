@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<div th:fragment="admin-header(action)">
+		<nav class="navbar navbar-dark fixed-top bg-primary flex-md-nowrap p-0 shadow">
+		<a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#" >
+			<img style="max-height: 30px;" alt="book-store" th:src="@{/image/icon-book-shop-64.png}">
+			Book store
+		</a> 
+		
+		<div class="input-group col-sm-6 col-md-5">
+			<!-- find book -->
+			<form th:if="${action != 'none'}" class="form-inline col-md-12" th:action="@{${action}}">
+				<input class="form-control col-md-10" type="search" placeholder="Search" aria-label="Search" name="searchvalue">
+				<button class="btn btn-secondary" type="submit" style="color: white">
+					<i class="fas fa-search"></i>
+				</button>
+			</form>
+  		</div>
+  		
+  		
+  		
+		<ul class="navbar-nav px-3">
+			<li class="nav-item text-nowrap d-flex align-items-center">
+				<a class="nav-link text-light mr-4" style="font-size: 25px" th:href="@{/account/check-login}"><i class="far fa-user-circle"></i></a> 
+				<a class="nav-link text-light mr-1"style="font-size: 25px; " th:href="@{/logout}"><i class="fas fa-sign-out-alt"></i></a>
+			</li>
+		</ul>
+		
+		
+		
+		
+	</nav>
+	
+	<button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!">
+		<span data-feather="home"></span> </button> 
+	</div>
+</body>
+</html>
