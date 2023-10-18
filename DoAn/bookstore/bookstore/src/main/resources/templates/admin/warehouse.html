@@ -72,9 +72,9 @@ cursor : pointer;
 									th:href="@{'/admin/warehouse/' + ${currentPage} + '?sortField=email&sortDir=' +${reverseSortDir}} ">Email</a>
 								</th>
 
-								<th scope="col"><a
-										th:href="@{'/admin/warehouse/' + ${currentPage} + '?sortField=email&sortDir=' +${reverseSortDir}} ">Trạng thái</a>
-								</th>
+<!--								<th scope="col"><a-->
+<!--										th:href="@{'/admin/warehouse/' + ${currentPage} + '?sortField=email&sortDir=' +${reverseSortDir}} ">Trạng thái</a>-->
+<!--								</th>-->
 
 								<th scope="col"><a
 										th:href="@{'/admin/warehouse/' + ${currentPage} + '?sortField=email&sortDir=' +${reverseSortDir}} ">Tổng tiền</a>
@@ -86,10 +86,10 @@ cursor : pointer;
 						<tbody>
 							<tr th:each="purchasing_order : ${lstPurchasingOrder}">
 								<td th:text="${purchasing_order.id_purchasing}">##</td>
-								<td th:text="${purchasing_order.id_supplier}">##</td>
+								<td th:text="${purchasing_order.supplier_name}">##</td>
 								<td th:text="${purchasing_order.phonenumber}">##</td>
 								<td th:text="${purchasing_order.email}">##</td>
-								<td>Mới tạo</td>
+<!--								<td>Hoàn thành</td>-->
 								<td th:text="${purchasing_order.totalprice}">##</td>
 
 							</tr>
@@ -97,30 +97,30 @@ cursor : pointer;
 					</table>
 
 
-					<div th:if="${totalPage > 1}">
-						<div class="row col-sm-10">
-							<div class="col-sm-2">Total Items: [[${totalItem}]]</div>
-							
-							<a class="btn btn-outline-primary" th:if="${currentPage > 1}"
-								th:href="@{'/admin/warehouse/' + ${pageFirst}  + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">First</a>
-							<span class="btn btn-outline-primary active" th:unless="${currentPage > 1}">First</span>&nbsp;&nbsp;
-							
-							<span th:each="i : ${#numbers.sequence(1, totalPage)}"> <a
-								class="btn btn-outline-primary" th:if="${currentPage != i}"
-								th:href="@{'/admin/warehouse/' + ${i} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} }">[[${i}]]</a>
-								<span class="btn btn-outline-primary active" th:unless="${currentPage != i}">[[${i}]]</span> &nbsp;
-							</span>
-							
-							<a th:if="${currentPage < totalPage}"
-								class="btn btn-outline-primary" th:href="@{'/admin/warehouse/' + ${currentPage +1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} }">Next</a>
-							<span class="btn btn-outline-primary active" th:unless="${currentPage < totalPage}">Next </span>&nbsp;&nbsp;
-							
-							<a th:if="${currentPage < totalPage}"
-								class="btn btn-outline-primary" th:href="@{'/admin/warehouse/'+${totalPage} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} }">Last</a>
-							<span class="btn btn-outline-primary active" th:unless="${currentPage < totalPage}">Last</span>
-						</div>
+<!--					<div th:if="${totalPage > 1}">-->
+<!--						<div class="row col-sm-10">-->
+<!--							<div class="col-sm-2">Total Items: [[${totalItem}]]</div>-->
+<!--							-->
+<!--							<a class="btn btn-outline-primary" th:if="${currentPage > 1}"-->
+<!--								th:href="@{'/admin/warehouse/' + ${pageFirst}  + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">First</a>-->
+<!--							<span class="btn btn-outline-primary active" th:unless="${currentPage > 1}">First</span>&nbsp;&nbsp;-->
+<!--							-->
+<!--							<span th:each="i : ${#numbers.sequence(1, totalPage)}"> <a-->
+<!--								class="btn btn-outline-primary" th:if="${currentPage != i}"-->
+<!--								th:href="@{'/admin/warehouse/' + ${i} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} }">[[${i}]]</a>-->
+<!--								<span class="btn btn-outline-primary active" th:unless="${currentPage != i}">[[${i}]]</span> &nbsp;-->
+<!--							</span>-->
+<!--							-->
+<!--							<a th:if="${currentPage < totalPage}"-->
+<!--								class="btn btn-outline-primary" th:href="@{'/admin/warehouse/' + ${currentPage +1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} }">Next</a>-->
+<!--							<span class="btn btn-outline-primary active" th:unless="${currentPage < totalPage}">Next </span>&nbsp;&nbsp;-->
+<!--							-->
+<!--							<a th:if="${currentPage < totalPage}"-->
+<!--								class="btn btn-outline-primary" th:href="@{'/admin/warehouse/'+${totalPage} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} }">Last</a>-->
+<!--							<span class="btn btn-outline-primary active" th:unless="${currentPage < totalPage}">Last</span>-->
+<!--						</div>-->
 
-					</div>
+<!--					</div>-->
 
 				</div>
 				<!-- ===============FORM TẠO ĐƠN NHẬP =========================-->
@@ -135,12 +135,19 @@ cursor : pointer;
 						</div>
 						<div class="card-body ">
 							<h1>Thông tin đơn nhập sách</h1>
-							<div class="row mb-3">
+							<div class="row mb-3" style="display: flex;justify-content: space-between;">
 								<div class="form-group">
 									<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Tìm sản phẩm" onkeyup="showResult(this.value)">
 									<div id="livesearch" style="padding: 15px 3px; max-height: 150px; overflow-y: auto">
 
 									</div>
+
+								</div>
+								<div class="form-group">
+									<select id="ncc"  class="form-select" style="width:100%; height:35px;">
+										<option value="-1">Chọn nhà cung cấp</option>
+										<option th:each="item : ${lstSuppliers}"  th:text="${item.Name}" th:value="${item.Id}"></option>
+									</select>
 								</div>
 							</div>
 
@@ -172,30 +179,6 @@ cursor : pointer;
 								</div>
 
 							</div>
-						</div>
-					</div>
-				</form>
-
-				<!-- ===============DIALOG DELETE =======================-->
-				<form th:action="@{/admin/customer/delete}" class="from__confirm"
-					th:method="post">
-					<div class="card">
-						<div class="card-header">Xác nhận xóa</div>
-
-						<div class="card-body" style="text-align: center;">
-							<p class="card-text ">
-								Bạn chắc chắn muốn xóa khách hàng có id: <strong id="user-id"></strong>
-								<input type="text" class="form-control input-delete d-none"
-									name="id" th:value="${user.userId}">
-							</p>
-							<div class="btns-comfirm d-flex justify-content-end">
-
-								<a style="color: white;cursor: pointer;" class="btn btn-secondary btn-cancel mr-3">Hủy</a>
-
-								<button type="submit" class="btn btn-primary">Xác Nhận</button>
-
-							</div>
-
 						</div>
 					</div>
 				</form>
@@ -360,8 +343,8 @@ cursor : pointer;
 			    viewMode: "years",
 			    minViewMode: "years"
 			});
-    		
-    		
+
+
 	</script>
 
 

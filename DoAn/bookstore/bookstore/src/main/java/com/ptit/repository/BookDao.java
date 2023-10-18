@@ -18,7 +18,8 @@ import com.ptit.model.PublishingCompany;
 public interface BookDao extends JpaRepository<Book, Long>,JpaSpecificationExecutor<Book>{
 
 	public List<Book> findByCategory(Category category); 
-	public Page<Book> findByBookNameContainsOrDescribeBookContainsAllIgnoreCaseOrderByBookNameAsc(String bookName,String describe, Pageable pageable); 
+	public Page<Book> findByBookNameContainsOrDescribeBookContainsAllIgnoreCaseOrderByBookNameAsc(String bookName,String describe, Pageable pageable);
+	public Page<Book> findByBookNameContains(String bookName, Pageable pageable);
 	public Page<Book> findByCategory(Category category, Pageable pageable); 
 	@Query("SELECT  MAX(idBook)\r\n"
 			+ "from Book")

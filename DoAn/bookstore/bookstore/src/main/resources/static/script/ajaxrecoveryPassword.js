@@ -25,10 +25,10 @@ $(".recoverpass_btn").click(function() {
 		success: function(value) {
 			
 			if (value == "true") {
-				alert("Cập nhật mật khẩu thành công!"); 
+				alert(MESSAGE_NOTIFY.PDATE_PASSWORD_SUCCESS);
 				window.location.replace("/account/login");
 			}else{
-				alert("Cập nhật thất bại!");  
+				alert(MESSAGE_NOTIFY.UPDATE_PASSWORD_FAILED);
 			}
 		},error: () => {
 		console.log('Error');

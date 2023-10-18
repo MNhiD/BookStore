@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 import javax.servlet.http.HttpSession;
 import javax.swing.event.TableColumnModelListener;
 
+import com.ptit.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
@@ -27,14 +28,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fasterxml.jackson.annotation.JsonCreator.Mode;
-import com.ptit.model.Cart;
-import com.ptit.model.CartManager;
-import com.ptit.model.District;
-import com.ptit.model.Items;
-import com.ptit.model.Order;
-import com.ptit.model.OrderDetail;
-import com.ptit.model.Province;
-import com.ptit.model.Village;
 import com.ptit.service.DistrictService;
 import com.ptit.service.OrderDetailService;
 import com.ptit.service.OrderService;
@@ -112,7 +105,7 @@ public class AccountController {
 			map.addAttribute("failedPassword", verifyPasswordFailed); 
 			map.addAttribute("emptyPassword", emptyPassword);
 			map.addAttribute("checkUsernameNull",checkUsernameNull);
-			map.addAttribute("messagePass", "Mật khẩu phải có tối thiểu "+minLengthPass+" ký tự!"); 
+			map.addAttribute("messagePass", MessageNotify.VERIFY_PASSWORD_001 +minLengthPass+MessageNotify.VERIFY_PASSWORD_002);
 			
 			map.addAttribute("username", username);
 			map.addAttribute("phone", phone); 

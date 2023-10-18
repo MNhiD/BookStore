@@ -100,6 +100,8 @@ function addAndEditNewUser(title="NEW USER", color="#28A745")
 }
 
 
+
+/* =================NHẬP HÀNG============== */
 const showResult = function(str){
  if (str.length==0) {
     document.getElementById("livesearch").innerHTML="";
@@ -108,7 +110,6 @@ const showResult = function(str){
   }
   if(str.length > 1){
   $.ajax({
-
   		type: "POST",
   		url: "http://localhost:8080/getBookValue",
   		data: {
@@ -119,17 +120,11 @@ const showResult = function(str){
   			 if(value.length > 0){
   			     document.getElementById("livesearch").innerHTML= value;
   			 }
-
   		}, error: () => {
   			console.log('Error');
-
-
   		}
   	})
-
   }
-
-
 }
 
 const AddItem = function(event){
@@ -144,6 +139,7 @@ const AddItem = function(event){
     showResult("")
     console.log(objItem);
 }
+
 var LstOrder = [];
 const AddToTable = function(item){
     var myTable = document.getElementById("myTableOrder");
@@ -158,19 +154,14 @@ const AddToTable = function(item){
         });
     }else{
            LstOrder.push(item);
-
-
     }
     refreshTable();
-
-
-
-
 }
+
+
 const refreshTable = function(){
 
-      var myTable = document.getElementById("myTableOrder");
-
+    var myTable = document.getElementById("myTableOrder");
     var TotalPrice = document.getElementById("TotalPrice");
     var TotalQuantity = document.getElementById("TotalQuantity");
       $("#myTableOrder").empty();
@@ -183,7 +174,7 @@ const refreshTable = function(){
                         var price = row.insertCell(3);
                         var quantity = row.insertCell(4);
                         var totalcost = row.insertCell(5);
-                         var edit = row.insertCell(6);
+                        var edit = row.insertCell(6);
 
                         index.innerHTML = --OrderIndex + 1;
                         id.innerHTML = Order.Id;
@@ -205,6 +196,8 @@ const refreshTable = function(){
                 }, 0);
 
 }
+
+
 const quantityChange = function(Id, _this){
     // cập nhật số lượng
     LstOrder.map(item => {
@@ -236,29 +229,50 @@ const priceChange = function(Id, _this){
 }
 
 const AddProduct = function(){
-    console.log(LstOrder);
-      $.ajax({
 
-      		type: "POST",
-      		url: "http://localhost:8080/savePurchasingOrder",
-      		contentType: "application/json",
-      		data:  JSON.stringify(LstOrder),
-      		success: function(value) {
-      		    if(value.length > 0){
-      		        //alert("Lưu thành công");
-      		        alert(MESSAGE_NOTIFY.SAVE_SUCCESS);
-      		        location.reload();
-      		    }else{
-      		       alert(MESSAGE_NOTIFY.SAVE_SUCCESS);
-      		    }
-      			 console.log(value);
+    var ncc = document.getElementById("ncc"); // getElementById đề láy cái thẻ có id là ncc là thẻ select
+    var id_ncc = ncc.value; // lấy giá trị đc chọn
+    console.log(ncc.value);
+    if(id_ncc < 0){ // ktra có chọn hay chưa
+        alert(MESSAGE_NOTIFY.VERIFY_SUPPLIER);
+        return;
+    }
+    if(LstOrder.length > 0){
 
-      		}, error: () => {
-      			console.log('Error');
+        // ly id ncc bỏ vào cái lstOrder của mình
+        // chọn rồi thì bỏ vào list này . sau đó lên server lấy ra lưu
+       LstOrder =  LstOrder.map(item => {
+            item.id_ncc = id_ncc;
+            return item;
+        })
+
+          $.ajax({
+
+              		type: "POST",
+              		url: "http://localhost:8080/savePurchasingOrder",
+              		contentType: "application/json",
+              		data:  JSON.stringify(LstOrder),
+              		success: function(value) {
+              		    if(value.length > 0){
+              		        //alert("Lưu thành công");
+              		        alert(MESSAGE_NOTIFY.SAVE_SUCCESS);
+              		        location.reload();
+              		    }else{
+              		       alert(MESSAGE_NOTIFY.SAVE_FAILED);
+              		    }
+              			 console.log(value);
+
+              		}, error: () => {
+              			console.log('Error');
 
 
-      		}
-      	})
+              		}
+              	})
+    }
+    else{
+        alert(MESSAGE_NOTIFY.VERIFY_PRODUCT);
+    }
+
 }
 const deleteItem = function(Id){
     var isCheck = confirm(MESSAGE_NOTIFY.CONFIRM_PURCHASING);

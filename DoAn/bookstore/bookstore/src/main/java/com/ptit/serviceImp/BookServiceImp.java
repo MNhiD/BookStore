@@ -49,6 +49,17 @@ public class BookServiceImp implements BookService{
 	public  Page<Supplier> getAllSupplier(Pageable page){
 		return supplierDAO.findAll(page);
 	}
+
+	@Override
+	public void UpdateQuantityBook(long id, int Quantity) {
+
+		Book book = bookdao.getById(id);
+		int quantity = book.getTotalQuantity() + Quantity;
+		book.setTotalQuantity(quantity);
+		bookdao.save(book);
+
+	}
+
 	@Override
 	public Page<Book> getAllBooks(Pageable page) {
 		return bookdao.findAll(page);  
@@ -121,6 +132,15 @@ public class BookServiceImp implements BookService{
 		Pageable pageable = PageRequest.of(pageNo -1, pageSize,sort);
 		return bookdao.findByBookNameContainsOrDescribeBookContainsAllIgnoreCaseOrderByBookNameAsc(key,key, pageable); 
 		
+	}
+
+	@Override
+	public Page<Book> findByBookNameContains(String key,int pageNo, int pageSize, String sortField, String sortDirection) {
+		Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name())
+				? Sort.by(sortField).ascending() : Sort.by(sortField).descending() ;
+		Pageable pageable = PageRequest.of(pageNo -1, pageSize,sort);
+		return bookdao.findByBookNameContains(key, pageable);
+
 	}
 
 	@Override

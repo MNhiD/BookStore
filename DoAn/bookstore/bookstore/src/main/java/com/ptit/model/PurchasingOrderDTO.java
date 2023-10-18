@@ -4,6 +4,15 @@ public class PurchasingOrderDTO {
     public int Id;
     public String Price;
     public  int  Quantity;
+    public  int id_ncc;
+
+    public int getId_ncc() {
+        return id_ncc;
+    }
+
+    public void setId_ncc(int id_ncc) {
+        this.id_ncc = id_ncc;
+    }
 
     public String getPrice() {
         return Price;

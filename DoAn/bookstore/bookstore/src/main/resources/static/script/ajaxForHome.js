@@ -44,7 +44,7 @@ $("#btn-udpate-new-pass").click(function() {
 		success: function(value) {
 			 
 			if (value == "0") {
-				alert("Cập nhật mật khẩu thành công!"); 
+				alert(MESSAGE_NOTIFY.UPDATE_PASSWORD_SUCCESS);
 				
 				window.location.replace("/account/userInfo");
 			}else if(value=="1"){

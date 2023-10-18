@@ -249,7 +249,7 @@ public class AjaxCallController {
 	public StringBuffer GetBookByValue(@RequestParam String strValue){
 
 		Pageable pageable = PageRequest.of(0, Integer.MAX_VALUE);
-		Page<Book> lstPageBook =  bookService.findBook(strValue, 1, Integer.MAX_VALUE, "bookName", "desc");
+		Page<Book> lstPageBook =  bookService.findByBookNameContains(strValue, 1, Integer.MAX_VALUE, "bookName", "desc");
 		List<Book> lstBook = lstPageBook.getContent();
 		if(lstBook != null && lstBook.size() > 0){
 			StringBuffer stringBuffer = new StringBuffer();
@@ -266,21 +266,25 @@ public class AjaxCallController {
 
 		if(lstOrder.size() > 0){
 
+			int id_ncc = lstOrder.stream().findFirst().get().id_ncc; // lấy ra
 			Purchasing purchasing = new Purchasing();
-			purchasing.setId_supplier(2);
-			purchasing.setStatus(2);
-			int insert = purchasingService.save(purchasing);
+			purchasing.setId_supplier(id_ncc);
+			purchasing.setStatus(1);
+			int insert = purchasingService.save(purchasing); // lưu bảng cha
 			int id = purchasingService.get();
 			if(id > 0){
 				for(PurchasingOrderDTO orderDTO : lstOrder){
-
+					// lưu tất cả bảng con
 					PurchasingOrder order = new PurchasingOrder();
 					order.setId_book(orderDTO.Id);
 					BigDecimal temDecimal = new BigDecimal(orderDTO.Price);
 					order.setPrice(temDecimal);
 					order.setQuantity(orderDTO.Quantity);
 					order.setId_purchasing(id);
-					int result = purchasingOrderService.save(order);
+					int result = purchasingOrderService.save(order); //lưu xong cập nhât bảng book
+					// cập nhật thêm SL vào bảng book , truyền id book vs SL vô
+					bookService.UpdateQuantityBook(orderDTO.Id,orderDTO.Quantity);
+
 				}
 			}
 

@@ -72,4 +72,9 @@ public class MessageNotify {
     public static String USER_EDIT_FAILED = "Cập nhập user thất bại, vui lòng kiểm tra lại thông tin";
     public static String USER_DEL_SUCCESS = "Xóa user thành công";
     public static String USER_DEL_FAILED = "Xóa user thất bại, người dùng đã có đơn hàng trong hệ thống";
+
+
+    //AccountController
+    public static String VERIFY_PASSWORD_001 = "Mật khẩu phải có tối thiểu ";
+    public static String VERIFY_PASSWORD_002 = " ký tự!";
 }
