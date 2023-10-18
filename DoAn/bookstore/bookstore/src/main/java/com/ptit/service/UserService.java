@@ -26,7 +26,7 @@ public interface UserService {
 
 	public boolean checkExistUsernameInfo(String username);
 	public User getUserByUsername(String username); 
-	public boolean updateUserInfo(String username, String email, String cccd, String phone, boolean gender, int age );
+	public boolean updateUserInfo(String username, String email, String phone, boolean gender, int age );
 	public boolean checkExistEmailInfo(String email, String username);
 	public boolean checkExistPhoneInfo(String phone, String username); 
 	public boolean verifyOldPassword(String oldPassword, String username); 

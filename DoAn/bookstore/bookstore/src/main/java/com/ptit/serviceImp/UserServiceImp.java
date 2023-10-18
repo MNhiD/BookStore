@@ -111,10 +111,10 @@ public class UserServiceImp implements UserService{
 	}
 
 	@Override
-	public boolean updateUserInfo(String username, String email, String cccd, String phone, boolean gender, int age) {
+	public boolean updateUserInfo(String username, String email, String phone, boolean gender, int age) {
 		User user = userDao.findByUsername(username);
 		user.setEmail(email);
-		user.setCccd(cccd);
+		//user.setCccd(cccd);
 		user.setPhone(phone);
 		user.setGender(gender);
 		user.setAge(age);

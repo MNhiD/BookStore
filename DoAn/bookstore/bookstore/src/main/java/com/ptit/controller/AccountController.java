@@ -184,7 +184,7 @@ public class AccountController {
 //	 }
 	 
 	 @PostMapping("/update")
-	 public String updateInfo(@RequestParam String email, @RequestParam String phone, @RequestParam String cccd, @RequestParam boolean gender, @RequestParam int age, Principal principal, Model model) {
+	 public String updateInfo(@RequestParam String email, @RequestParam String phone, @RequestParam boolean gender, @RequestParam int age, Principal principal, Model model) {
 		 
 		 
 		 
@@ -195,7 +195,7 @@ public class AccountController {
 			 boolean checkEmailRegex=false;
 			 boolean checkPhone = userService.checkExistPhoneInfo(phone, principal.getName()); 
 			 boolean checkEmail = userService.checkExistEmailInfo(email, principal.getName());
-			 boolean checkCccd = userService.checkExistCCCDInfo(cccd, principal.getName());
+			 //boolean checkCccd = userService.checkExistCCCDInfo(cccd, principal.getName());
 
 			 boolean checkPhoneLength = false; 
 			 if(phone.length()!=10) checkPhoneLength = true;
@@ -205,7 +205,7 @@ public class AccountController {
 			 
 			 com.ptit.model.User user = userService.getUserByUsername(principal.getName()); 
 		        user.setEmail(email);
-				user.setCccd(cccd);
+				//user.setCccd(cccd);
 		        user.setPhone(phone);
 		        user.setAge(age); 
 		        model.addAttribute("user", user);
@@ -218,18 +218,18 @@ public class AccountController {
 		        model.addAttribute("year", currentYear-16);
 		        
 		        
-			 if(checkPhone==true || checkEmail==true || checkPhoneLength==true || checkEmailRegex==true || checkCccd==true) {
+			 if(checkPhone==true || checkEmail==true || checkPhoneLength==true || checkEmailRegex==true ) {
 				
 				 
 			        model.addAttribute("checkPhone", checkPhone); 
 					model.addAttribute("checkEmail", checkEmail);
-				 	model.addAttribute("checkCccd", checkCccd);
+				 	//model.addAttribute("checkCccd", checkCccd);
 				 	model.addAttribute("checkPhoneLength", checkPhoneLength);
 					model.addAttribute("checkEmailRegex",checkEmailRegex);
 					return "userInfo"; 
 			 }else {
 				
-				 boolean checkUpdate = userService.updateUserInfo(principal.getName(), email, cccd, phone, gender, age);
+				 boolean checkUpdate = userService.updateUserInfo(principal.getName(), email, phone, gender, age);
 				 return "redirect:/account/userInfo?updateSuccess=true"; 
 				 
 			 }
