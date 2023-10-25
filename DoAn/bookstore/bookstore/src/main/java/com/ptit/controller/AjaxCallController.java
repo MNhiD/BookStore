@@ -293,7 +293,10 @@ public class AjaxCallController {
 
 		return purchasingService.getAllOrder();
 	}
-	
+	@PostMapping("/get-detail-purchasing")
+	public List<PurchasingOrder> getDetailPurchasing(@RequestParam long id){
+		return purchasingOrderService.getOrderById(id);
+	}
 	@PostMapping("/order-detail")
 	public StringBuffer orderDetail(@RequestParam long orderId, Principal principal) {
 		

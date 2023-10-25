@@ -2,6 +2,8 @@ package com.ptit.serviceImp;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -46,9 +48,16 @@ public class UserServiceImp implements UserService{
 		// TODO Auto-generated method stub
 		return userDao.countUsers();
 	}
+	public static final Pattern VALID_EMAIL_ADDRESS_REGEX =
+			Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 
 	@Override
-	public boolean addAccount(String username, String password, String phone) {
+	public boolean validate(String email) {
+		Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(email);
+		return matcher.matches();
+	}
+	@Override
+	public boolean addAccount(String username, String password, String phone,String email) {
 		
 		
 		User user = new User(); 
@@ -57,7 +66,8 @@ public class UserServiceImp implements UserService{
 		user.setUsername(username);
 		user.setPassword(passwordEncrypt);
 		user.setPhone(phone);
-		user.setAge(10);
+		user.setEmail(email);
+		user.setAge(2007);
 		
 		userDao.save(user); 
 		
@@ -111,9 +121,9 @@ public class UserServiceImp implements UserService{
 	}
 
 	@Override
-	public boolean updateUserInfo(String username, String email, String phone, boolean gender, int age) {
+	public boolean updateUserInfo(String username, String phone, boolean gender, int age) {
 		User user = userDao.findByUsername(username);
-		user.setEmail(email);
+		//user.setEmail(email);
 		//user.setCccd(cccd);
 		user.setPhone(phone);
 		user.setGender(gender);

@@ -182,7 +182,7 @@ const refreshTable = function(){
 
                         quantity.innerHTML = "<input type='number' value='"+Order.Quantity +"' onchange='quantityChange("+ Order.Id +",this)'/>"
                         price.innerHTML = "<input type='number' value='"+Order.Price +"' onchange='priceChange("+ Order.Id +",this)'/>"
-                        totalcost.innerText = Order.TotalCost;
+                        totalcost.innerText = Order.TotalCost.toLocaleString('it-IT', {style : 'currency', currency : 'VND'});
                         edit.innerHTML = "<span style='border-bottom: 1px solid; color: blue' onclick='deleteItem("+Order.Id+")'>Xóa</span>"
 
             });
@@ -231,7 +231,7 @@ const priceChange = function(Id, _this){
 const AddProduct = function(){
 
     var ncc = document.getElementById("ncc"); // getElementById đề láy cái thẻ có id là ncc là thẻ select
-    var id_ncc = ncc.value; // lấy giá trị đc chọn
+    var id_ncc = parseInt(ncc.value); // lấy giá trị đc chọn
     console.log(ncc.value);
     if(id_ncc < 0){ // ktra có chọn hay chưa
         alert(MESSAGE_NOTIFY.VERIFY_SUPPLIER);
@@ -280,4 +280,54 @@ const deleteItem = function(Id){
          LstOrder = LstOrder.filter(x => x.Id != Id);
          refreshTable();
     }
+}
+var LstOrder2 =[];
+const viewDetail = function(_this){
+    LstOrder2 = [];
+    var id = _this.getAttribute("id");
+    console.log(id);
+      $.ajax({
+
+                  		type: "POST",
+                  		url: "http://localhost:8080/get-detail-purchasing",
+                  		data:  {id : id},
+                  		success: function(value) {
+                            LstOrder2 = value;
+                  			 console.log(value);
+                            refreshTableV2();
+                  		}, error: () => {
+                  			console.log('Error');
+
+
+                  		}
+                  	})
+}
+
+const refreshTableV2 = function(){
+
+    var myTable = document.getElementById("myTableOrder_View");
+      $("#myTableOrder_View").empty();
+            var OrderIndex = LstOrder2.length;
+            LstOrder2.forEach(Order => {
+                   var row = myTable.insertRow(0);
+                        var index = row.insertCell(0);
+                        var id = row.insertCell(1);
+                        var name = row.insertCell(2);
+                        var price = row.insertCell(3);
+                        var quantity = row.insertCell(4);
+                        var totalcost = row.insertCell(5);
+
+                        index.innerHTML = --OrderIndex + 1;
+                        id.innerHTML = Order.id_book;
+                        name.innerHTML = Order.book_name;
+
+                        quantity.innerHTML = Order.quantity
+                        price.innerHTML = Order.price.toLocaleString('it-IT', {style : 'currency', currency : 'VND'});;
+                        totalcost.innerText= (Order.quantity * Order.price).toLocaleString('it-IT', {style : 'currency', currency : 'VND'});;
+
+
+            });
+
+
+
 }

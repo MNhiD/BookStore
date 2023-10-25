@@ -28,8 +28,8 @@ public class DashboardController {
 	OrderService orderService;
 	@Autowired
 	OrderDetailDao orderDetailDao;
-	
-	
+
+
 	@RequestMapping(value={"", "/","statisticts"})
 	public String index(Model model) {
 
@@ -38,28 +38,25 @@ public class DashboardController {
 		model.addAttribute("price", list);
 		model.addAttribute("Totalearning", orderDetailDao.getTotalEarning());
 		model.addAttribute("TotalItem", orderDetailDao.getTotalItemSold());
-		
+
 		model.addAttribute("listYear", orderDao.getListYear());
-		model.addAttribute("listMonth", orderDao.getListMonth());
-		
+
 		return "admin/statisticts";
 	}
-	
+
 	@PostMapping("/statisticts")
-	public String index2(Model model, 	@RequestParam(name="year")  int year, @RequestParam(name = "month") int month) {
-		
+	public String index2(Model model, 	@RequestParam(name="year")  int year) {
+
 		model.addAttribute("NumberUser", userService.countUsers());
 		List<Float> list = orderService.getMoneyPerMonthByYear(year);
-//		List<Float> listMonthMoney = orderService.getyear);
-
 		model.addAttribute("price", list);
 		model.addAttribute("Totalearning", orderDetailDao.getTotalEarning());
 		model.addAttribute("TotalItem", orderDetailDao.getTotalItemSold());
-		
+
 		model.addAttribute("listYear", orderDao.getListYear());
-		model.addAttribute("listMonth", orderDao.getListMonth());
 		return "admin/statisticts";
 	}
+
 	
 	
 	// Added to test 500 page

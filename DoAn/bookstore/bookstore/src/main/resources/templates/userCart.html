@@ -101,7 +101,7 @@
 					<div class="col-md-6 col-sm-12">
 						<div th:each="item:${listItems}" class="wow flipInY" style="display:flex;justify-content: center;align-items: center;">
 							<div>
-								<input type="checkbox" style="width: 20px; height:20px; margin: 30px" th:id="${item.book.idBook}">
+<!--								<input type="checkbox" style="width: 20px; height:20px; margin: 30px" th:id="${item.book.idBook}">-->
 							</div>
 							<div>
 								<p class="book" th:data-idBook="${item.book.idBook}" style="display:flex;justify-content: center;align-items: center;">
@@ -257,6 +257,7 @@
 
 	</div>
 	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+	<script th:src="@{../script/adminjs/MessageNotify.js}"></script>
 	<script th:src="@{../script/ajaxForCart.js}"></script>
 	<script
 		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"

@@ -75,7 +75,7 @@ public class AccountController {
 	
 	
 	@PostMapping("/signup")
-	public String signUp(ModelMap map, @RequestParam String username, @RequestParam String phone, @RequestParam String password, @RequestParam String verifyPassword) {
+	public String signUp(ModelMap map, @RequestParam String username, @RequestParam String phone,@RequestParam String email, @RequestParam String password, @RequestParam String verifyPassword) {
 
 
 
@@ -87,7 +87,8 @@ public class AccountController {
 		}
 		boolean checkPhoneLength = false; 
 		boolean verifyPasswordFailed = false; 
-		boolean emptyPassword = false; 
+		boolean emptyPassword = false;
+		boolean emptyEmail = email.isEmpty() || !userService.validate(email);
 		int minLengthPass = 5; 
 		
 		if(phone.length()!=10) checkPhoneLength = true; 
@@ -98,7 +99,7 @@ public class AccountController {
 		}
 
 		
-		if(checkPhone==true || checkUsername==true || checkPhoneLength==true || verifyPasswordFailed==true ||emptyPassword==true || checkUsernameNull==true) {
+		if(checkPhone==true || checkUsername==true || checkPhoneLength==true || verifyPasswordFailed==true ||emptyPassword==true || checkUsernameNull==true || emptyEmail) {
 			map.addAttribute("checkPhone", checkPhone); 
 			map.addAttribute("checkUsername", checkUsername); 
 			map.addAttribute("phoneLength", checkPhoneLength);
@@ -108,11 +109,14 @@ public class AccountController {
 			map.addAttribute("messagePass", MessageNotify.VERIFY_PASSWORD_001 +minLengthPass+MessageNotify.VERIFY_PASSWORD_002);
 			
 			map.addAttribute("username", username);
-			map.addAttribute("phone", phone); 
+			map.addAttribute("phone", phone);
+			map.addAttribute("email", email);
+			map.addAttribute("emptyEmail", emptyEmail);
+			map.addAttribute("MessageEmail", MessageNotify.VERIFY_EMAIL);
 			return "signup"; 
 		}
 		else {
-			boolean checkAdd = userService.addAccount(username, password, phone); 
+			boolean checkAdd = userService.addAccount(username, password, phone, email);
 			
 		}
 		return "redirect:/account/login";
@@ -184,27 +188,23 @@ public class AccountController {
 //	 }
 	 
 	 @PostMapping("/update")
-	 public String updateInfo(@RequestParam String email, @RequestParam String phone, @RequestParam boolean gender, @RequestParam int age, Principal principal, Model model) {
-		 
-		 
-		 
-		 
-		 
+	 public String updateInfo(@RequestParam String phone, @RequestParam boolean gender, @RequestParam int age, Principal principal, Model model) {
+
 		 if(principal!=null) {
 
 			 boolean checkEmailRegex=false;
 			 boolean checkPhone = userService.checkExistPhoneInfo(phone, principal.getName()); 
-			 boolean checkEmail = userService.checkExistEmailInfo(email, principal.getName());
+			 //boolean checkEmail = userService.checkExistEmailInfo(email, principal.getName());
 			 //boolean checkCccd = userService.checkExistCCCDInfo(cccd, principal.getName());
 
 			 boolean checkPhoneLength = false; 
 			 if(phone.length()!=10) checkPhoneLength = true;
-			 if(pattern.matcher(email).matches()==false){
-				 checkEmailRegex=true;
-			 }
+//			 if(pattern.matcher(email).matches()==false){
+//				 checkEmailRegex=true;
+//			 }
 			 
 			 com.ptit.model.User user = userService.getUserByUsername(principal.getName()); 
-		        user.setEmail(email);
+		        //user.setEmail(email);
 				//user.setCccd(cccd);
 		        user.setPhone(phone);
 		        user.setAge(age); 
@@ -218,32 +218,27 @@ public class AccountController {
 		        model.addAttribute("year", currentYear-16);
 		        
 		        
-			 if(checkPhone==true || checkEmail==true || checkPhoneLength==true || checkEmailRegex==true ) {
+			 if(checkPhone==true || checkPhoneLength==true || checkEmailRegex==true ) {
 				
 				 
 			        model.addAttribute("checkPhone", checkPhone); 
-					model.addAttribute("checkEmail", checkEmail);
+					//model.addAttribute("checkEmail", checkEmail);
 				 	//model.addAttribute("checkCccd", checkCccd);
 				 	model.addAttribute("checkPhoneLength", checkPhoneLength);
 					model.addAttribute("checkEmailRegex",checkEmailRegex);
 					return "userInfo"; 
 			 }else {
 				
-				 boolean checkUpdate = userService.updateUserInfo(principal.getName(), email, phone, gender, age);
+				 boolean checkUpdate = userService.updateUserInfo(principal.getName(), phone, gender, age);
 				 return "redirect:/account/userInfo?updateSuccess=true"; 
 				 
 			 }
-			 
-			 
-			
+
 		 }else {
 			 return "redirect:/account/login"; 
 		 }
-		 
-		 
-		 
-		
 	 }
+
 	 
 	 @GetMapping("/update-password")
 	 public String updatePassword(Principal principal, Model model) {

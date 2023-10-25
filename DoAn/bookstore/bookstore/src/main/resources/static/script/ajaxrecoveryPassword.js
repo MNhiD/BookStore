@@ -25,7 +25,7 @@ $(".recoverpass_btn").click(function() {
 		success: function(value) {
 			
 			if (value == "true") {
-				alert(MESSAGE_NOTIFY.PDATE_PASSWORD_SUCCESS);
+				alert(MESSAGE_NOTIFY.UPDATE_PASSWORD_SUCCESS);
 				window.location.replace("/account/login");
 			}else{
 				alert(MESSAGE_NOTIFY.UPDATE_PASSWORD_FAILED);

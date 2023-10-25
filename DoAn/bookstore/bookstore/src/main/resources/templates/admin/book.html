@@ -67,7 +67,7 @@
 									<button type="button" class="btn btn-warning m-1 btn__edit--book">
 							          <i class="far fa-edit"></i>
 							        </button>
-							        <button type="button" class="btn btn-danger btn__delete--book" th:id="${book.getIdBook()}">
+							        <button type="button" class="btn btn-danger btn__delete--book" th:id="${book.idBook}">
 							          <i style="color:black;" class="far fa-trash-alt"></i>
 							        </button>
 							       <input type="hidden" id="idBook" name="idBook" th:value="${book.idBook}" >
@@ -205,12 +205,12 @@
 							</div>
 							<div class="form-row">
 							
-							<!-- ======================== FIELD SỐ LƯỢNG ======================== -->
-								<div class="form-group col-md-2">
-									<label for="total-quantity">Số lượng: </label> <input 
-									 th:field="*{totalQuantity}"	type="number" min="1"  class="form-control" id="total-quantity" >
-										<p class="form-message" >Không hợp lệ !!</p>
-								</div>
+<!--							&lt;!&ndash; ======================== FIELD SỐ LƯỢNG ======================== &ndash;&gt;-->
+<!--								<div class="form-group col-md-2">-->
+<!--									<label for="total-quantity">Số lượng: </label> <input -->
+<!--									 th:field="*{totalQuantity}"	type="number" min="1"  class="form-control" id="total-quantity" >-->
+<!--										<p class="form-message" >Không hợp lệ !!</p>-->
+<!--								</div>-->
 								
 							<!-- ====================== FIELD MÔ TẢ ========================= -->
 								<div class="form-group col-md-5">
@@ -234,7 +234,7 @@
 						<div class="card-header">Xác nhận xóa</div>
 						
 						<div class="card-body" style="text-align: center;">
-							<p class="card-text ">Bạn chắc chắn muốn xóa sách có id: <strong id="book-id"></strong>
+							<p class="card-text ">Bạn chắc chắn muốn xóa cuốn sách này không?
 							<input type="text" class="form-control input-delete d-none" name="id" th:value="${book.idBook}"></p>
 							<div class="btns-comfirm d-flex justify-content-end">
 														

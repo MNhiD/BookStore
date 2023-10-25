@@ -36,8 +36,8 @@ public class Purchasing {
 
     @Column(name="totalprice")
     private  BigDecimal totalprice;
-
-
+    @Column(name="totalpriceformat")
+    private  String totalpriceformat;
 
 
 

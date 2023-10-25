@@ -77,4 +77,5 @@ public class MessageNotify {
     //AccountController
     public static String VERIFY_PASSWORD_001 = "Mật khẩu phải có tối thiểu ";
     public static String VERIFY_PASSWORD_002 = " ký tự!";
+    public  static  String VERIFY_EMAIL = "Email không hợp lệ!";
 }

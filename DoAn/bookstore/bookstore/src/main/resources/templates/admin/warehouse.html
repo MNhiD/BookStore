@@ -26,6 +26,7 @@ cursor : pointer;
     background-color: antiquewhite;
 }
 </style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 <body>
 	<div id="toast"></div>
 	<div class="main__overlay animated fadeIn"></div>
@@ -47,7 +48,7 @@ cursor : pointer;
 						<form method="get" th:action="@{'/admin/warehouse/Add/' + ${currentPage}}">
 							<input type="hidden"  name="sortField" th:value="${sortField}"> 
 							<input type="hidden"  name="sortDir" th:value="${sortDir}">
-							<button type="submit" class="btn btn-success">Tạo đơn nhập</button>
+							<button type="submit" class="btn btn-success"><i class="fas fa-plus"></i> Tạo đơn nhập</button>
 						</form> 
 					</div>
 				</div>
@@ -81,6 +82,9 @@ cursor : pointer;
 								</th>
 
 <!--								<th class="align-middle" style="width: 10%;" scope="col">Alter</th>-->
+								<th scope="col"><a
+										th:href="@{'/admin/warehouse/' + ${currentPage} + '?sortField=email&sortDir=' +${reverseSortDir}} ">Tác vụ</a>
+								</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -90,8 +94,10 @@ cursor : pointer;
 								<td th:text="${purchasing_order.phonenumber}">##</td>
 								<td th:text="${purchasing_order.email}">##</td>
 <!--								<td>Hoàn thành</td>-->
-								<td th:text="${purchasing_order.totalprice}">##</td>
-
+								<td th:text="${ purchasing_order.totalpriceformat}">##</td>
+								<td th:id="${purchasing_order.id_purchasing}" onclick="viewDetail(this)"  data-toggle="modal" data-target="#exampleModal">
+									<span style="border-bottom: 1px solid; color: blue">Xem chi tiết</span>
+								</td>
 							</tr>
 						</tbody>
 					</table>
@@ -182,6 +188,45 @@ cursor : pointer;
 						</div>
 					</div>
 				</form>
+				<!-- Button trigger modal -->
+
+
+				<!-- Modal -->
+				<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal-dialog modal-lg" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="exampleModalLabel">Chi tiết đơn nhập</h5>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="modal-body">
+								<div style="max-height:280px; overflow:auto;">
+									<table class="table table-bordered" >
+										<thead>
+										<tr>
+											<th scope="col">#</th>
+											<th scope="col">Mã sản phẩm</th>
+											<th scope="col">Tên sản phẩm</th>
+											<th scope="col">Đơn giá</th>
+											<th scope="col">Số lượng</th>
+											<th scope="col">Thành tiền</th>
+										</tr>
+										</thead>
+										<tbody id="myTableOrder_View">
+
+
+										</tbody>
+									</table>
+								</div>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+							</div>
+						</div>
+					</div>
+				</div>
 			</main>
 		</div>
 	</div>
@@ -192,7 +237,8 @@ cursor : pointer;
 	<script th:src="@{/script/adminJs/customer.js}"></script>
 	<script th:src="@{/script/validate_input.js}"></script>
 	<script th:src="@{/script/adminJs/popup.js}"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 	<script th:inline="javascript">
 		Validator({
 			form : '.from__add--user',

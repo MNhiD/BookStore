@@ -110,7 +110,7 @@
 				<input style="color: #841609" type="text" class="form-control" id="Username" placeholder="Username" aria-label="Username" name="username" th:value="${user.username}" readonly>
 				<br>
 				<label style="font-size: 20px; font-weight: 500; color: #f85c4a" for="exampleInputEmail1">Email</label>
-				 <input style="color: #841609" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" th:value="${user.email}" name="email"placeholder="Nhập địa chỉ email">
+				 <input disabled style="color: #841609" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" th:value="${user.email}" name="email"placeholder="Nhập địa chỉ email">
 				<div th:if="${checkEmail == true}"
 							style="color: red; margin: 10px 0px;">
 							Địa chỉ email đã được sử dụng<br />Hãy chọn tên địa chỉ email khác!

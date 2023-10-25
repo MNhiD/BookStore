@@ -33,6 +33,9 @@ public class PurchasingOrder {
 	@Column(name="id_purchasing")
 	private int id_purchasing;
 
+	@Column(name="book_name")
+	private String book_name;
+
 }
 
 

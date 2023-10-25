@@ -59,7 +59,7 @@
                     </div>
                     <div th:if="${phoneLength == true}"
                          style="color: red; margin: 10px 0px;">
-                        Số điện thoại phải đủ 10 số<br/>
+                        Số điện thoại phải đủ 10 số!<br/>
 
                     </div>
 
@@ -72,6 +72,19 @@
 <!--                               th:value="${phone}" placeholder="Gmail" minlength="10" maxLength="10">-->
 <!--                    </div>-->
 
+                    <div class="input-group mb-3">
+                        <div class="input-group-append">
+                            <span class="input-group-text"><i class="fas fa-key"></i></span>
+                        </div>
+                        <input type="email" name="email"
+                               class="form-control input_pass" value="" placeholder="Email">
+                    </div>
+                    <div th:if="${emptyEmail == true}"
+
+                         style="color: red; margin: 10px 0px;">
+                        [[${MessageEmail}]]
+
+                    </div>
                     <div class="input-group mb-3">
                         <div class="input-group-append">
                             <span class="input-group-text"><i class="fas fa-key"></i></span>

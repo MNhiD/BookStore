@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.ptit.service.PurchasingOrderService;
 
+import java.util.List;
 @Service
 public class PurchasingOrderServiceImp implements PurchasingOrderService {
 
@@ -25,4 +26,11 @@ public class PurchasingOrderServiceImp implements PurchasingOrderService {
     public Page<PurchasingOrder> getAll() {
         return null;
     }
+
+    @Override
+    public List<PurchasingOrder> getOrderById(long id) {
+        return purchasingOrderDAO.getOrDerById(id);
+    }
+
 }
+

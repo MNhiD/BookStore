@@ -1,5 +1,6 @@
 package com.ptit.admin.controller;
 
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -124,11 +125,16 @@ public class WarehouseController {
 		model.addAttribute("user", new User());
 		model.addAttribute("address", new Address());
 		Page<User> page = userService.findPaginated(pageNo, pageSize, sortField, sortDir);
+	List<Purchasing> lstPurchasingOrder = purchasingService.getAllOrder();
+	for(Purchasing p : lstPurchasingOrder){
+		DecimalFormat formatter = new DecimalFormat("###,###,###");
+		p.setTotalpriceformat(formatter.format(p.getTotalprice()) + " VNĐ");
+	}
 
 		List<User> listUser = page.getContent();
 		//List<User> listUser2 = listUser.stream().filter(u -> 2==userRoleDao.getByUser(u).getRole().getIdRole()).collect(Collectors.toList());
 		model.addAttribute("listUser", listUser);
-		model.addAttribute("lstPurchasingOrder",purchasingService.getAllOrder());
+		model.addAttribute("lstPurchasingOrder",lstPurchasingOrder);
 		model.addAttribute("sortField", sortField);
 		model.addAttribute("sortDir", sortDir);
 		model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
