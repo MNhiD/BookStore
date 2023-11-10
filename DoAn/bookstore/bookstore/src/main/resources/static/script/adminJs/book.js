@@ -50,7 +50,6 @@ btnEditBook.click(() => {
 	})
 });
 
-
 /*======================FORM ADD BOOK HANDLE ===================*/
 const selects = document.querySelectorAll('.box-options');
 selects.forEach((select,index)=>{
@@ -65,7 +64,8 @@ selects.forEach((select,index)=>{
 	/*EVENTS CLOSE SECLECT BOX */
 	select.onchange=(e)=>{
 		select.style.display="none";
-		input.value=(select.options.item(select.selectedIndex).text)
+		var value = (select.options.item(select.selectedIndex).text);
+		input.value = value;
 		input.parentElement.querySelector('.form-message').classList.remove('invalid');   
 		
 	}
@@ -145,5 +145,50 @@ function clearnField(){
 	})
 }
 
+var form = document.getElementById("form-add");
+var LstBook = [];
 
+$(document).on("submit","#form-add", function(){
+
+    var date = new Date($("#datepickerfrom").val());
+    var today = new Date();
+    if(date > today){
+        alert("Ngày xuất bản không được lớn hơn ngày hiện tại");
+        return false;
+    }
+    var bookName = $("#book-name").val();
+
+
+    var isExist = LstBook.filter(x => x.bookName.trim() == bookName).length > 0;
+    if(isExist){
+      alert("Tên Sách đã Tồn tại");
+            return false;
+    }
+
+
+    return true;
+
+});
+
+var GetAllBook = function(){
+   $.ajax({
+
+                  		type: "POST",
+                  		url: "http://localhost:8080/getAllBook",
+                  		contentType: "application/json",
+                  		data:  JSON.stringify({}),
+                  		success: function(value) {
+                  		      LstBook = value;
+                  			 console.log(value);
+
+                  		}, error: () => {
+                  			console.log('Error');
+
+
+                  		}
+                  	})
+
+}
+
+GetAllBook();
 

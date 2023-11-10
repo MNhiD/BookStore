@@ -245,6 +245,14 @@ public class AjaxCallController {
 		}
 		return "false";
 	}
+	@PostMapping("/getAllBook")
+	public List<Book> GetAllBook(){
+
+		Pageable pageable = PageRequest.of(0, Integer.MAX_VALUE);
+		Page<Book> lstPageBook = bookService.getAllBooks(pageable);
+		List<Book> lstBook = lstPageBook.getContent();
+		return lstBook;
+	}
 	@PostMapping("/getBookValue")
 	public StringBuffer GetBookByValue(@RequestParam String strValue){
 

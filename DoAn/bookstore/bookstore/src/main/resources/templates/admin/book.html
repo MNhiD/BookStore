@@ -103,7 +103,7 @@
 			
 			<!-- ===============FORM ADD BOOK =========================-->
 				<form th:action="@{/admin/book/save}" th:object="${book}" method="post"
-				enctype="multipart/form-data" class="from__add--book animated bounceInDown ">
+				enctype="multipart/form-data" class="from__add--book animated bounceInDown " id="form-add">
 					<div class="card">
 						<div style="" class="card-header ">
 							<span>NEW BOOK</span><i style="z-index: 1000;" class="far fa-times-circle btn-close-from"></i>
@@ -321,6 +321,6 @@
         	
         });
       </script>
-	
+
 </body>
 </html>

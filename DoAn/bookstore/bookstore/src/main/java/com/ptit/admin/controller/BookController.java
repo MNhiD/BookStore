@@ -13,6 +13,8 @@ import com.ptit.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -144,10 +146,12 @@ public class BookController {
 				//do nothing
 			}
 		}
+
 		book.setAuthor(authorService.selectOrUpdateAuthor(authorName));
 		book.setCategory(categoryService.selectOrUpdateCategory(categoryName));
 		book.setCompany(publishingCompanyService.selectOrUpdateCompany(companyName));
 		bookService.save(book);
+
 		
 		
 //		System.out.println(authorService.selectOrUpdateAuthor(authorName).getIdAuthor()+" "+authorService.selectOrUpdateAuthor(authorName).getName());
