@@ -21,4 +21,15 @@ const MESSAGE_NOTIFY = {
     //ajaxForHome
     UPDATE_PASSWORD_SUCCESS : "Cập nhật mật khẩu thành công!",
     UPDATE_PASSWORD_FAILED : "Cập nhật thất bại!",
+
+    //book
+    VERIFY_PUBLISHDAY : "Ngày xuất bản không được lớn hơn ngày hiện tại",
+    VERIFY_BOOKNAME : "Tên sách đã tồn tại",
+
+    // login
+    LOGIN_FAILED : "Đăng nhập thất bại<br />Kiểm tra username và password"
 }
+
+	$(document).ready(function(){
+			 $("#login-message-error").html(MESSAGE_NOTIFY.LOGIN_FAILED);
+	});

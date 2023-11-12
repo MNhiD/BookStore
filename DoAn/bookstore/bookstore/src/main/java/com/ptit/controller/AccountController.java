@@ -100,19 +100,25 @@ public class AccountController {
 
 		
 		if(checkPhone==true || checkUsername==true || checkPhoneLength==true || verifyPasswordFailed==true ||emptyPassword==true || checkUsernameNull==true || emptyEmail) {
-			map.addAttribute("checkPhone", checkPhone); 
-			map.addAttribute("checkUsername", checkUsername); 
+			map.addAttribute("checkPhone", checkPhone);
+			map.addAttribute("messageCheckPhone", MessageNotify.VALIDATION_PHONE_E001);
+			map.addAttribute("checkUsername", checkUsername);
+			map.addAttribute("messageUsername", MessageNotify.SIGNUP_NAME_ERROR);
 			map.addAttribute("phoneLength", checkPhoneLength);
-			map.addAttribute("failedPassword", verifyPasswordFailed); 
+			map.addAttribute("messageCheckPhoneLength", MessageNotify.VALIDATION_PHONE_E002);
+			map.addAttribute("failedPassword", verifyPasswordFailed);
+			map.addAttribute("messageCheckPass", MessageNotify.SIGNUP_CONFIRMPASSWORD);
 			map.addAttribute("emptyPassword", emptyPassword);
 			map.addAttribute("checkUsernameNull",checkUsernameNull);
-			map.addAttribute("messagePass", MessageNotify.VERIFY_PASSWORD_001 +minLengthPass+MessageNotify.VERIFY_PASSWORD_002);
+			map.addAttribute("messageCheckUsername1",MessageNotify.VALIDATION_NAME_E001);
+			map.addAttribute("messageCheckUsername2",MessageNotify.VALIDATION_NAME_E002);
+			map.addAttribute("messagePass", MessageNotify.VALIDATION_PASSWORD_E001 +minLengthPass+MessageNotify.VALIDATION_PASSWORD_E002);
 			
 			map.addAttribute("username", username);
 			map.addAttribute("phone", phone);
 			map.addAttribute("email", email);
 			map.addAttribute("emptyEmail", emptyEmail);
-			map.addAttribute("MessageEmail", MessageNotify.VERIFY_EMAIL);
+			map.addAttribute("messageEmail", MessageNotify.VALIDATION_EMAIL);
 			return "signup"; 
 		}
 		else {

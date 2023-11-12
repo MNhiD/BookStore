@@ -67,9 +67,7 @@
 
 				</div> -->
 				<div th:if="${#request.getParameter('error') == 'true'}"
-					style="color: red; margin: 10px 0px;">
-					Đăng nhập thất bại<br />Kiểm tra username và password
-
+					style="color: red; margin: 10px 0px;" id="login-message-error">
 				</div>
 				<div class="mt-4">
 					<div class="d-flex justify-content-center links" style="">
@@ -98,5 +96,6 @@
 		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
 		crossorigin="anonymous"></script>
 	<script th:src="@{/script/adminJs/MessageNotify.js}" ></script>
+
 </body>
 </html>

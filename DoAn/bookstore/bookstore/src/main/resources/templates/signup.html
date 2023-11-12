@@ -36,12 +36,12 @@
                     <div th:if="${checkUsername == true}"
 
                          style="color: red; margin: 10px 0px;">
-                        Tên đăng nhập đã tồn tại<br/>Hãy chọn tên đăng nhập khác!
+                        [[${messageCheckUsername1}]]<br/>[[${messageCheckUsername2}]]
 
                     </div>
                     <div th:if="${checkUsernameNull == true}"
                          style="color: red; margin: 10px 0px;">
-                        Tên đăng nhập không được để trống!
+                        [[${messageUsername}]]
                     </div>
                     <div class="input-group mb-3">
                         <div class="input-group-append">
@@ -54,12 +54,12 @@
                     <!-- CHECK PHONE -->
                     <div th:if="${checkPhone == true}"
                          style="color: red; margin: 10px 0px;">
-                        Số điện thoại đã được đăng ký<br/>
+                        [[${messageCheckPhone}]]<br/>
 
                     </div>
                     <div th:if="${phoneLength == true}"
                          style="color: red; margin: 10px 0px;">
-                        Số điện thoại phải đủ 10 số!<br/>
+                        [[${messageCheckPhoneLength}]]<br/>
 
                     </div>
 
@@ -82,7 +82,7 @@
                     <div th:if="${emptyEmail == true}"
 
                          style="color: red; margin: 10px 0px;">
-                        [[${MessageEmail}]]
+                        [[${messageEmail}]]
 
                     </div>
                     <div class="input-group mb-3">
@@ -103,7 +103,7 @@
                     </div>
                     <div th:if="${failedPassword == true}"
                          style="color: red; margin: 10px 0px;">
-                        Mật khẩu xác thực không trùng khớp<br/>
+                        [[${messageCheckPass}]]<br/>
 
                     </div>
                     <div th:if="${emptyPassword== true}"

@@ -75,7 +75,13 @@ public class MessageNotify {
 
 
     //AccountController
-    public static String VERIFY_PASSWORD_001 = "Mật khẩu phải có tối thiểu ";
-    public static String VERIFY_PASSWORD_002 = " ký tự!";
-    public  static  String VERIFY_EMAIL = "Email không hợp lệ!";
+    public static String SIGNUP_NAME_ERROR = "Tên đăng nhập không được để trống!";
+    public static String VALIDATION_NAME_E001 = "Tên đăng nhập đã tồn tại";
+    public static String VALIDATION_NAME_E002 = "Hãy chọn tên đăng nhập khác!";
+    public static String VALIDATION_PHONE_E001 = "Số điện thoại đã được đăng ký";
+    public static String VALIDATION_PHONE_E002 = "Số điện thoại phải đủ 10 số!";
+    public  static  String VALIDATION_EMAIL = "Email không hợp lệ!";
+    public static String VALIDATION_PASSWORD_E001 = "Mật khẩu phải có tối thiểu ";
+    public static String VALIDATION_PASSWORD_E002 = " ký tự!";
+    public static String SIGNUP_CONFIRMPASSWORD = "Mật khẩu xác thực không trùng khớp";
 }

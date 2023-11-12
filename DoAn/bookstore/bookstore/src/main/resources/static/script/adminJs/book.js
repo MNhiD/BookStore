@@ -153,21 +153,18 @@ $(document).on("submit","#form-add", function(){
     var date = new Date($("#datepickerfrom").val());
     var today = new Date();
     if(date > today){
-        alert("Ngày xuất bản không được lớn hơn ngày hiện tại");
+        alert(MESSAGE_NOTIFY.VERIFY_PUBLISHDAY);
         return false;
     }
     var bookName = $("#book-name").val();
 
 
-    var isExist = LstBook.filter(x => x.bookName.trim() == bookName).length > 0;
+    var isExist = LstBook.filter(x => x.bookName.trim().toLowerCase() == bookName.trim().toLowerCase()).length > 0;
     if(isExist){
-      alert("Tên Sách đã Tồn tại");
+      alert(MESSAGE_NOTIFY.VERIFY_BOOKNAME);
             return false;
     }
-
-
     return true;
-
 });
 
 var GetAllBook = function(){
@@ -183,11 +180,8 @@ var GetAllBook = function(){
 
                   		}, error: () => {
                   			console.log('Error');
-
-
                   		}
                   	})
-
 }
 
 GetAllBook();
